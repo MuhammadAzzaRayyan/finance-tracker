@@ -1,0 +1,23 @@
+/* static/style.css */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.balance-amount {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.transaction-item {
+    transition: transform 0.2s;
+}
+
+.transaction-item:hover {
+    transform: translateX(5px);
+}
