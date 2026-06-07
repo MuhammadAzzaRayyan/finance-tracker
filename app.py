@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for
 import json
 import os
 from datetime import datetime
@@ -14,7 +14,8 @@ def load_data():
         # Data awal jika file belum ada
         default_data = {
             "transactions": [],
-            "balance": 0
+            "balance": 0,
+            "next_id": 1
         }
         save_data(default_data)
         return default_data
@@ -37,58 +38,69 @@ def recalculate_balance(transactions):
             balance -= transaction['amount']
     return balance
 
-# Route halaman utama
 @app.route('/')
 def index():
     data = load_data()
-    transactions = data['transactions']
-    balance = recalculate_balance(transactions)
-    
-    # Urutkan transaksi dari yang terbaru
-    transactions.reverse()
-    
     return render_template('index.html', 
-                         transactions=transactions, 
-                         balance=balance)
+                         transactions=data['transactions'],
+                         balance=data['balance'])
 
-# API untuk menambah transaksi
-@app.route('/add_transaction', methods=['POST'])
+@app.route('/add', methods=['POST'])
 def add_transaction():
-    description = request.form.get('description')
-    amount = float(request.form.get('amount'))
-    type_trans = request.form.get('type')
-    
     data = load_data()
     
+    description = request.form.get('description', '').strip()
+    amount_str = request.form.get('amount', '0')
+    trans_type = request.form.get('type', 'expense')
+    
+    # Validasi input
+    if not description:
+        return redirect(url_for('index'))
+    
+    try:
+        amount = float(amount_str)
+        if amount <= 0:
+            return redirect(url_for('index'))
+    except ValueError:
+        return redirect(url_for('index'))
+    
+    # Buat transaksi baru
     new_transaction = {
-        'id': len(data['transactions']) + 1,
+        'id': data.get('next_id', 1),
         'description': description,
         'amount': amount,
-        'type': type_trans,
-        'date': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        'type': trans_type,
+        'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
     
     data['transactions'].append(new_transaction)
+    data['next_id'] = data.get('next_id', 1) + 1
     data['balance'] = recalculate_balance(data['transactions'])
-    save_data(data)
     
+    save_data(data)
     return redirect(url_for('index'))
 
-# API untuk menghapus transaksi
-@app.route('/delete_transaction/<int:transaction_id>')
+@app.route('/delete/<int:transaction_id>')
 def delete_transaction(transaction_id):
     data = load_data()
+    
+    # Hapus transaksi berdasarkan ID
     data['transactions'] = [t for t in data['transactions'] if t['id'] != transaction_id]
     data['balance'] = recalculate_balance(data['transactions'])
-    save_data(data)
     
+    save_data(data)
     return redirect(url_for('index'))
 
-# API untuk mendapatkan data dalam format JSON
-@app.route('/api/transactions')
-def api_transactions():
-    data = load_data()
-    return jsonify(data['transactions'])
+@app.route('/clear-all')
+def clear_all():
+    # Hapus semua transaksi
+    default_data = {
+        "transactions": [],
+        "balance": 0,
+        "next_id": 1
+    }
+    save_data(default_data)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    app.run(debug=True)
