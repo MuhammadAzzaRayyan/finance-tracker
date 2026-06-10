@@ -1,0 +1,8 @@
+:root{--primary:#667eea;--accent:#764ba2}
+body{font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--accent) 100%);color:#fff}
+.container{max-width:1100px}
+.card{border-radius:12px;background:#fff;color:#000}
+#transactions .tx-item{border-left:4px solid #ddd;padding:10px;margin-bottom:10px;border-radius:6px;background:#f9f9fb}
+.tx-amount{font-weight:600}
+.income{border-left-color:#28a745}
+.expense{border-left-color:#dc3545}
