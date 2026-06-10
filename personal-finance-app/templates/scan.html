@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Struk - Personal Finance Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); color: #fff; }
+        .container { max-width: 720px; margin-top: 40px; }
+        .card { border-radius: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card p-4">
+            <h4>📷 Scan Struk</h4>
+            <p>Unggah foto struk untuk mengekstrak data otomatis (merchant, tanggal, total).</p>
+
+            <form action="/upload_scan" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="file" name="receipt" accept="image/*" class="form-control" required>
+                </div>
+                <button class="btn btn-primary">Upload & Scan</button>
+                <a href="/" class="btn btn-secondary">Batal</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
