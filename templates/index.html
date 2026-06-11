@@ -207,6 +207,46 @@
                     </div>
                 </div>
 
+                    <!-- Recurring -->
+                    <div class="card mt-3">
+                        <div class="card-header bg-light">
+                            <i class="fas fa-redo"></i> Transaksi Berulang
+                        </div>
+                        <div class="card-body">
+                            {% if recurring %}
+                                <ul class="list-group mb-3">
+                                    {% for r in recurring %}
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>{{ r.description }} — Rp {{ "{:,.0f}".format(r.amount) }} ({{ r.frequency }})</div>
+                                            <div class="small text-muted">Last: {{ r.last_run if r.last_run else '-' }}</div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <div class="text-muted mb-3">Belum ada transaksi berulang.</div>
+                            {% endif %}
+
+                            <form action="/add_recurring" method="POST" class="row g-2">
+                                <div class="col-5"><input name="description" class="form-control" placeholder="Deskripsi"></div>
+                                <div class="col-2"><input name="amount" class="form-control" placeholder="Jumlah" type="number" step="0.01"></div>
+                                <div class="col-2">
+                                    <select name="type" class="form-select">
+                                        <option value="expense">Pengeluaran</option>
+                                        <option value="income">Pemasukan</option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <select name="frequency" class="form-select">
+                                        <option value="daily">Harian</option>
+                                        <option value="weekly">Mingguan</option>
+                                        <option value="monthly" selected>Bulanan</option>
+                                    </select>
+                                </div>
+                                <div class="col-1"><button class="btn btn-primary w-100">OK</button></div>
+                            </form>
+                        </div>
+                    </div>
+
                 <!-- Danger Zone -->
                 <div class="card mt-3">
                     <div class="card-header bg-danger text-white">

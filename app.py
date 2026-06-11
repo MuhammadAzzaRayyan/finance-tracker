@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file, flash
 import json
 import os
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import io
 import csv
 
@@ -117,9 +117,59 @@ def compute_budget_status(data):
         })
     return budgets
 
+def next_due_date(last_run, frequency):
+    now = datetime.now()
+    if last_run:
+        try:
+            lr = datetime.strptime(last_run, '%Y-%m-%d %H:%M:%S')
+        except Exception:
+            lr = None
+    else:
+        lr = None
+    if not lr:
+        return now
+    if frequency == 'daily':
+        return lr + timedelta(days=1)
+    if frequency == 'weekly':
+        return lr + timedelta(weeks=1)
+    if frequency == 'monthly':
+        # naive month add: add 30 days
+        return lr + timedelta(days=30)
+    return now
+
+def process_recurring(data):
+    """Check recurring rules and create transactions if due."""
+    changed = False
+    now = datetime.now()
+    for r in data.get('recurring', []):
+        freq = r.get('frequency')
+        last = r.get('last_run')
+        due = next_due_date(last, freq)
+        if due <= now:
+            # create transaction
+            t = {
+                'id': data.get('next_id', 1),
+                'description': r.get('description', '') + ' (recurring)',
+                'amount': float(r.get('amount', 0)),
+                'type': r.get('type', 'expense'),
+                'date': now.strftime('%Y-%m-%d %H:%M:%S'),
+                'wallet_id': r.get('wallet_id', 1),
+                'category_id': r.get('category_id', 0),
+                'subcategory': r.get('subcategory','')
+            }
+            data.setdefault('transactions', []).append(t)
+            data['next_id'] = data.get('next_id', 1) + 1
+            r['last_run'] = now.strftime('%Y-%m-%d %H:%M:%S')
+            changed = True
+    if changed:
+        save_data(data)
+    return changed
+
 @app.route('/')
 def index():
     data = load_data()
+    # process recurring items first (create due transactions)
+    process_recurring(data)
     wallets = recalculate_wallets(data)
     balance = recalculate_balance(data)
     budgets_status = compute_budget_status(data)
@@ -135,7 +185,8 @@ def index():
                          categories=data.get('categories', []),
                          wallets=wallets,
                          budgets=data.get('budgets', []),
-                         budgets_status=budgets_status)
+                         budgets_status=budgets_status,
+                         recurring=data.get('recurring', []))
 
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
@@ -164,6 +215,39 @@ def add_budget():
     data.setdefault('budgets', []).append(new_budget)
     # increment a standalone id tracker for budgets
     data['next_category_id'] = data.get('next_category_id', 1000) + 1
+    save_data(data)
+    return redirect(url_for('index'))
+
+
+@app.route('/add_recurring', methods=['POST'])
+def add_recurring():
+    data = load_data()
+    description = request.form.get('description', '').strip()
+    try:
+        amount = float(request.form.get('amount', '0'))
+    except ValueError:
+        amount = 0
+    trans_type = request.form.get('type', 'expense')
+    wallet_id = int(request.form.get('wallet_id', 1))
+    category_id = int(request.form.get('category_id', 0))
+    subcategory = request.form.get('subcategory', '')
+    frequency = request.form.get('frequency', 'monthly')
+    if not description or amount <= 0:
+        flash('Recurring tidak valid', 'danger')
+        return redirect(url_for('index'))
+    r = {
+        'id': data.get('next_recurring_id', 1),
+        'description': description,
+        'amount': amount,
+        'type': trans_type,
+        'wallet_id': wallet_id,
+        'category_id': category_id,
+        'subcategory': subcategory,
+        'frequency': frequency,
+        'last_run': None
+    }
+    data.setdefault('recurring', []).append(r)
+    data['next_recurring_id'] = data.get('next_recurring_id', 1) + 1
     save_data(data)
     return redirect(url_for('index'))
 
