@@ -20,4 +20,4 @@ Aplikasi web pengelola keuangan pribadi sederhana berbasis Python Flask.
 - Perhitungan saldo sekarang berdasarkan dompet + transaksi.
 - Tombol tambah dompet dan form transfer di UI.
 
-Catatan: fitur recurring, budgeting, notifikasi, grafik, dan keamanan PIN akan ditambahkan bertahap sesuai rencana.
+Catatan: fitur recurring (transaksi berulang), budgeting, notifikasi, grafik, dan keamanan PIN akan ditambahkan bertahap sesuai rencana.
