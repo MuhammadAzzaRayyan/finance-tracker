@@ -53,14 +53,38 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="text-center mb-4">
-            <h1 class="text-white">
-                <i class="fas fa-wallet"></i> Personal Finance Manager
-            </h1>
-            <p class="text-white">Kelola pemasukan dan pengeluaran Anda dengan mudah</p>
+        <div class="app-navbar">
+            <div class="container d-flex align-items-center justify-content-between" style="height:56px">
+                <div class="brand">
+                    <span class="logo"></span>
+                    <div>
+                        <div style="font-size:14px">Finance</div>
+                        <div style="font-size:12px;color:#6b7280;margin-top:-2px">Manager</div>
+                    </div>
+                </div>
+                <form class="d-flex ms-3 me-auto" style="max-width:580px">
+                    <input class="form-control me-2" type="search" placeholder="Cari transaksi atau kategori" aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-link text-danger me-2">Bantuan</button>
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width:36px;height:36px;color:white">U</div>
+                </div>
+            </div>
         </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2 sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Beranda</a>
+                        <a class="nav-link" href="#"><i class="fas fa-wallet me-2"></i>Dompet</a>
+                        <a class="nav-link" href="#"><i class="fas fa-chart-pie me-2"></i>Laporan</a>
+                        <a class="nav-link" href="#"><i class="fas fa-cog me-2"></i>Pengaturan</a>
+                    </nav>
+                </div>
+
+                <div class="col-lg-10 content-area">
 
                 <!-- Flash messages -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -80,7 +104,7 @@
         </div>
 
         <div class="row">
-            <!-- Form Add Transaction -->
+            <!-- Left column: forms and controls -->
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
@@ -166,6 +190,7 @@
                             <div class="col-1"><button class="btn btn-primary w-100">OK</button></div>
                         </form>
                     </div>
+
                 </div>
 
                 <!-- Budgets -->

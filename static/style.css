@@ -1,23 +1,44 @@
-/* static/style.css */
-body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Modern YouTube-like UI styles */
+:root{
+    --primary:#ff0000;
+    --bg:#f7f7f8;
+    --card:#ffffff;
+    --muted:#6c757d;
+    --accent:#1f2937;
 }
-
-.card {
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+body{
+    background:var(--bg);
+    font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color:var(--accent);
+    margin:0;
 }
-
-.balance-amount {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #28a745;
+.app-navbar{
+    background:#ffffff;
+    border-bottom:1px solid #e6e6e6;
+    position:sticky;
+    top:0;
+    z-index:10;
 }
-
-.transaction-item {
-    transition: transform 0.2s;
+.app-navbar .brand{
+    display:flex;align-items:center;gap:.6rem;font-weight:700;color:var(--accent);
 }
-
-.transaction-item:hover {
-    transform: translateX(5px);
+.app-navbar .brand .logo{
+    width:36px;height:24px;background:var(--primary);border-radius:4px;display:inline-block;
+}
+.sidebar{
+    width:220px;padding-top:1rem;min-height:calc(100vh - 56px);background:transparent;
+}
+.sidebar .nav-link{color:#222;padding:.6rem 1rem;border-radius:8px}
+.sidebar .nav-link.active,.sidebar .nav-link:hover{background:#fff;box-shadow:0 1px 6px rgba(16,24,40,0.06)}
+.content-area{padding:1.25rem}
+.card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);}
+.balance-card{padding:1.2rem}
+.balance-amount{font-size:2rem;font-weight:700;color:#111}
+.small-muted{color:var(--muted)}
+.form-control, .form-select{border-radius:8px}
+.btn-primary{background:var(--primary);border-color:var(--primary)}
+.progress{height:10px;border-radius:999px}
+.recurring-list .list-group-item{border-radius:8px}
+@media (max-width: 991px){
+    .sidebar{display:none}
 }
