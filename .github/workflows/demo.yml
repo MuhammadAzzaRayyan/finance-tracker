@@ -1,0 +1,48 @@
+name: Demo run
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Start Flask app in background
+        run: |
+          nohup python app.py > server.log 2>&1 &
+          echo "waiting for server..."
+          for i in {1..20}; do
+            if curl -sSf http://127.0.0.1:5000/ >/dev/null 2>&1; then
+              echo "server is up"; break
+            fi
+            sleep 1
+          done
+
+      - name: Smoke tests
+        run: |
+          echo "GET /"
+          curl -sSf http://127.0.0.1:5000/ | head -n 5
+          echo "GET /export"
+          curl -sSf -o transactions.csv http://127.0.0.1:5000/export || true
+          ls -l transactions.csv || true
+
+      - name: Upload server log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log
+          path: server.log
