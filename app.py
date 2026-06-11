@@ -76,17 +76,96 @@ def recalculate_wallets(data):
         })
     return computed
 
+def parse_date(dt_str):
+    try:
+        return datetime.strptime(dt_str, '%Y-%m-%d %H:%M:%S')
+    except Exception:
+        return None
+
+def compute_budget_status(data):
+    """Compute spent for each budget and return list with status."""
+    now = datetime.now()
+    budgets = []
+    for b in data.get('budgets', []):
+        cat_id = b.get('category_id')
+        month = b.get('month', now.month)
+        year = b.get('year', now.year)
+        limit = float(b.get('limit', 0))
+        spent = 0.0
+        for t in data.get('transactions', []):
+            if t.get('type') == 'expense' and t.get('category_id') == cat_id:
+                dt = parse_date(t.get('date',''))
+                if not dt:
+                    continue
+                if dt.month == month and dt.year == year:
+                    spent += float(t.get('amount', 0))
+        percent = (spent / limit * 100) if limit > 0 else 0
+        status = 'ok'
+        if limit > 0 and spent >= limit:
+            status = 'over'
+        elif limit > 0 and spent >= 0.9 * limit:
+            status = 'near'
+        budgets.append({
+            'id': b.get('id'),
+            'category_id': cat_id,
+            'limit': limit,
+            'spent': spent,
+            'percent': percent,
+            'month': month,
+            'year': year,
+            'status': status
+        })
+    return budgets
+
 @app.route('/')
 def index():
     data = load_data()
     wallets = recalculate_wallets(data)
     balance = recalculate_balance(data)
+    budgets_status = compute_budget_status(data)
+    # flash notifications for budgets
+    for b in budgets_status:
+        if b['status'] == 'near':
+            flash(f"Anggaran kategori {b['category_id']} mendekati batas: Rp {b['spent']:.0f} / Rp {b['limit']:.0f}", 'warning')
+        elif b['status'] == 'over':
+            flash(f"Anggaran kategori {b['category_id']} terlampaui: Rp {b['spent']:.0f} / Rp {b['limit']:.0f}", 'danger')
     return render_template('index.html', 
                          transactions=data['transactions'],
                          balance=balance,
                          categories=data.get('categories', []),
                          wallets=wallets,
-                         budgets=data.get('budgets', []))
+                         budgets=data.get('budgets', []),
+                         budgets_status=budgets_status)
+
+@app.route('/add_budget', methods=['POST'])
+def add_budget():
+    data = load_data()
+    try:
+        category_id = int(request.form.get('category_id', 0))
+    except ValueError:
+        category_id = 0
+    try:
+        limit = float(request.form.get('limit', '0'))
+    except ValueError:
+        limit = 0
+    try:
+        month = int(request.form.get('month', datetime.now().month))
+        year = int(request.form.get('year', datetime.now().year))
+    except ValueError:
+        month = datetime.now().month
+        year = datetime.now().year
+    new_budget = {
+        'id': data.get('next_category_id', 1000),
+        'category_id': category_id,
+        'limit': limit,
+        'month': month,
+        'year': year
+    }
+    data.setdefault('budgets', []).append(new_budget)
+    # increment a standalone id tracker for budgets
+    data['next_category_id'] = data.get('next_category_id', 1000) + 1
+    save_data(data)
+    return redirect(url_for('index'))
 
 @app.route('/add', methods=['POST'])
 def add_transaction():

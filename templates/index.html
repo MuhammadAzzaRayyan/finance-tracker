@@ -168,6 +168,45 @@
                     </div>
                 </div>
 
+                <!-- Budgets -->
+                <div class="card mt-3">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="fas fa-wallet"></i> Anggaran (Budget)
+                    </div>
+                    <div class="card-body">
+                        {% if budgets_status %}
+                            <ul class="list-group mb-3">
+                                {% for b in budgets_status %}
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between">
+                                            <div>Kategori ID: {{ b.category_id }} — Bulan: {{ b.month }}/{{ b.year }}</div>
+                                            <div>Rp {{ "{:,.0f}".format(b.spent) }} / Rp {{ "{:,.0f}".format(b.limit) }}</div>
+                                        </div>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar {% if b.status=='over' %}bg-danger{% elif b.status=='near' %}bg-warning{% else %}bg-success{% endif %}" role="progressbar" style="width: {{ b.percent|round(0) if b.percent<=100 else 100 }}%"></div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="text-muted">Belum ada anggaran.</div>
+                        {% endif %}
+
+                        <form action="/add_budget" method="POST" class="row g-2">
+                            <div class="col-6">
+                                <select name="category_id" class="form-select">
+                                    {% for c in categories %}
+                                        <option value="{{ c.id }}">{{ c.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3"><input name="limit" class="form-control" placeholder="Limit (Rp)" type="number" step="0.01"></div>
+                            <div class="col-2"><input name="month" class="form-control" placeholder="Bln" type="number" min="1" max="12"></div>
+                            <div class="col-1"><button class="btn btn-dark w-100">Tambah</button></div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Danger Zone -->
                 <div class="card mt-3">
                     <div class="card-header bg-danger text-white">
