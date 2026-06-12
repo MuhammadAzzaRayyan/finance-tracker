@@ -1,17 +1,63 @@
 {
     "transactions": [],
     "categories": [
-        {"id": 1, "name": "Makan", "color": "#ff7675", "icon": "utensils", "subcategories": [{"id": 11, "name": "Warung"},{"id":12,"name":"Restoran"}]},
-        {"id": 2, "name": "Transportasi", "color": "#74b9ff", "icon": "car", "subcategories": [{"id":21,"name":"Bensin"},{"id":22,"name":"Parkir"}]}
+        {
+            "id": 1,
+            "name": "Makan",
+            "color": "#ff7675",
+            "icon": "utensils",
+            "subcategories": [
+                {
+                    "id": 11,
+                    "name": "Warung"
+                },
+                {
+                    "id": 12,
+                    "name": "Restoran"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Transportasi",
+            "color": "#74b9ff",
+            "icon": "car",
+            "subcategories": [
+                {
+                    "id": 21,
+                    "name": "Bensin"
+                },
+                {
+                    "id": 22,
+                    "name": "Parkir"
+                }
+            ]
+        }
     ],
     "wallets": [
-        {"id": 1, "name": "Tunai", "initial_balance": 0},
-        {"id": 2, "name": "Bank A", "initial_balance": 0}
+        {
+            "id": 1,
+            "name": "Tunai",
+            "initial_balance": 0
+        },
+        {
+            "id": 2,
+            "name": "Bank A",
+            "initial_balance": 0
+        }
     ],
     "recurring": [],
-    "budgets": [],
+    "budgets": [
+        {
+            "id": 3,
+            "category_id": 1,
+            "limit": 0,
+            "month": 6,
+            "year": 2026
+        }
+    ],
     "next_id": 1,
-    "next_category_id": 3,
+    "next_category_id": 4,
     "next_subcategory_id": 101,
     "next_wallet_id": 3
 }
