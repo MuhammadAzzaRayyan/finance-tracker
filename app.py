@@ -241,18 +241,12 @@ def index():
                          budgets=data.get('budgets', []),
                          budgets_status=budgets_status,
                          recurring=data.get('recurring', []),
-<<<<<<< HEAD
-                         chart_income=income_total,
-                         chart_expense=expense_total,
-                         chart_category_totals=category_totals)
-=======
                          income_labels=income_labels,
                          income_values=income_values,
                          income_colors=income_colors,
                          expense_labels=expense_labels,
                          expense_values=expense_values,
                          expense_colors=expense_colors)
->>>>>>> 13c29d4 (Add category charts for income and expense)
 
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
