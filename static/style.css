@@ -115,3 +115,33 @@ button, .btn, a.btn {
     color: #fff;
 }
 
+/* Table readability improvements */
+.table {
+    font-size: 0.98rem;
+}
+.table { table-layout: fixed; width: 100%; }
+.table th, .table td {
+    padding: 0.9rem 1rem;
+    vertical-align: middle;
+}
+/* Make description column wrap and allow wide content without truncation */
+.table td.description {
+    white-space: normal !important;
+    word-break: break-word;
+    max-width: 720px; /* allow long descriptions to wrap */
+}
+/* Ensure responsive container allows horizontal scroll on small screens */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Slightly increase card content area so tables have more room */
+.content-area { padding: 1rem; }
+
+/* Column width allocations */
+.table th.col-desc, .table td.description { width: 60%; }
+.table th.col-date { width: 15%; }
+.table th.col-amount { width: 12%; text-align: right; }
+.table th.col-type { width: 8%; }
+.table th.col-actions { width: 5%; text-align: center; }
+
