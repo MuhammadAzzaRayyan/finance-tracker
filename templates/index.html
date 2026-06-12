@@ -79,6 +79,26 @@
                     </div>
                 </div>
 
+                <!-- Charts -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Perbandingan Pemasukan vs Pengeluaran</div>
+                            <div class="card-body">
+                                <canvas id="incomeExpenseChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Pengeluaran per Kategori</div>
+                            <div class="card-body">
+                                <canvas id="categoryChart" width="400" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <!-- Left column: forms and controls -->
                     <div class="col-md-4">
@@ -357,6 +377,41 @@
             });
         }
         document.addEventListener('DOMContentLoaded', attachCurrencyBehavior);
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function(){
+                try{
+                    const income = Number({{ chart_income|default(0) }});
+                    const expense = Number({{ chart_expense|default(0) }});
+                    const catTotals = {{ chart_category_totals|tojson }};
+                    // Income vs Expense pie
+                    const ctx = document.getElementById('incomeExpenseChart');
+                    if(ctx){
+                        new Chart(ctx.getContext('2d'), {
+                            type: 'pie',
+                            data: {
+                                labels: ['Pemasukan','Pengeluaran'],
+                                datasets: [{
+                                    data: [income, expense],
+                                    backgroundColor: ['#28a745','#dc3545']
+                                }]
+                            }
+                        });
+                    }
+                    // Category bar chart
+                    const ctx2 = document.getElementById('categoryChart');
+                    if(ctx2){
+                        const labels = Object.keys(catTotals);
+                        const values = labels.map(l => Number(catTotals[l]));
+                        new Chart(ctx2.getContext('2d'), {
+                            type: 'bar',
+                            data: { labels: labels, datasets: [{ label: 'Pengeluaran', data: values, backgroundColor: '#007bff' }] },
+                            options: { scales: { y: { beginAtZero: true } } }
+                        });
+                    }
+                }catch(e){ console.error(e); }
+            });
         </script>
 </body>
 </html>

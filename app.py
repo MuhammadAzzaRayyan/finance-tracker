@@ -173,6 +173,22 @@ def index():
     wallets = recalculate_wallets(data)
     balance = recalculate_balance(data)
     budgets_status = compute_budget_status(data)
+    # Compute totals for charts: total income vs expense and expense per category
+    income_total = 0.0
+    expense_total = 0.0
+    category_map = {c['id']: c.get('name', 'Umum') for c in data.get('categories', [])}
+    category_totals = {}
+    for t in data.get('transactions', []):
+        try:
+            amt = float(t.get('amount', 0))
+        except Exception:
+            amt = 0.0
+        if t.get('type') == 'income':
+            income_total += amt
+        else:
+            expense_total += amt
+            cname = category_map.get(t.get('category_id'), 'Umum')
+            category_totals[cname] = category_totals.get(cname, 0) + amt
     # flash notifications for budgets
     for b in budgets_status:
         if b['status'] == 'near':
@@ -186,7 +202,10 @@ def index():
                          wallets=wallets,
                          budgets=data.get('budgets', []),
                          budgets_status=budgets_status,
-                         recurring=data.get('recurring', []))
+                         recurring=data.get('recurring', []),
+                         chart_income=income_total,
+                         chart_expense=expense_total,
+                         chart_category_totals=category_totals)
 
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
