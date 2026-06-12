@@ -86,7 +86,7 @@
         <div class="balance-card">
             <h4>Total Saldo</h4>
             <div class="balance-amount">
-                Rp {{ "{:,.0f}".format(balance) }}
+                {{ 'Rp. ' + "{:,.0f}".format(balance).replace(',', '.') }}
             </div>
             <small class="text-muted">Update terakhir: {{ now if now else "Sekarang" }}</small>
         </div>
@@ -101,7 +101,7 @@
                             <input type="text" name="description" class="form-control" placeholder="Deskripsi" required>
                         </div>
                         <div class="col-md-3 mb-2">
-                            <input type="number" name="amount" class="form-control" placeholder="Jumlah (Rp)" step="1000" required>
+                            <input type="text" name="amount" class="form-control currency" placeholder="Rp. 0" step="1000" required>
                         </div>
                         <div class="col-md-2 mb-2">
                             <select name="type" class="form-control" required>
@@ -132,9 +132,9 @@
                             </div>
                             <div class="col-md-4 text-end">
                                 {% if transaction.type == 'income' %}
-                                    <span class="text-success">+ Rp {{ "{:,.0f}".format(transaction.amount) }}</span>
+                                    <span class="text-success">+ {{ 'Rp. ' + "{:,.0f}".format(transaction.amount).replace(',', '.') }}</span>
                                 {% else %}
-                                    <span class="text-danger">- Rp {{ "{:,.0f}".format(transaction.amount) }}</span>
+                                    <span class="text-danger">- {{ 'Rp. ' + "{:,.0f}".format(transaction.amount).replace(',', '.') }}</span>
                                 {% endif %}
                             </div>
                             <div class="col-md-2 text-end">
@@ -160,5 +160,17 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        function attachCurrencyBehavior(){
+            function formatValue(v){ if(!v) return ''; v = v.toString().replace(/[^0-9\-]/g,''); return 'Rp. ' + v.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+            function rawValue(v){ return v ? v.toString().replace(/[^0-9\-]/g,'') : ''; }
+            document.querySelectorAll('input.currency').forEach(function(inp){
+                inp.addEventListener('input', function(){ const raw = rawValue(this.value); this.dataset.raw = raw; this.value = formatValue(raw); });
+                if(inp.value){ inp.dataset.raw = rawValue(inp.value); inp.value = formatValue(inp.dataset.raw); }
+            });
+            document.querySelectorAll('form').forEach(function(form){ form.addEventListener('submit', function(){ this.querySelectorAll('input.currency').forEach(function(ci){ ci.value = ci.dataset.raw || rawValue(ci.value) || 0; }); }); });
+        }
+        document.addEventListener('DOMContentLoaded', attachCurrencyBehavior);
+        </script>
 </body>
 </html>
