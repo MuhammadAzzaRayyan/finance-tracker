@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<<<<<<< HEAD
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -27,6 +28,8 @@
             margin-bottom: 20px;
         }
     </style>
+=======
+>>>>>>> 13c29d4 (Add category charts for income and expense)
 </head>
 <body>
     <div class="app-navbar">
@@ -79,6 +82,7 @@
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <!-- Charts -->
                 <div class="row">
                     <div class="col-md-6">
@@ -285,6 +289,130 @@
                                     <i class="fas fa-trash-alt"></i> Hapus Semua Transaksi
                                 </a>
                             </div>
+=======
+                <!-- Wallets -->
+                <div class="card mt-3">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="fas fa-wallet"></i> Dompet & Transfer
+                    </div>
+                    <div class="card-body panel-scroll wallets-row">
+                        <ul class="list-group mb-3">
+                            {% for w in wallets %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>{{ w.name }}</div>
+                                    <div>Rp {{ "{:,.0f}".format(w.balance) }}</div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <form action="/add_wallet" method="POST" class="row g-2 mb-2">
+                            <div class="col-6"><input name="name" placeholder="Nama dompet" class="form-control"></div>
+                            <div class="col-4"><input name="initial" placeholder="Saldo awal" class="form-control" type="number" step="0.01"></div>
+                            <div class="col-2"><button class="btn btn-sm btn-success w-100">Tambah</button></div>
+                        </form>
+
+                        <form action="/transfer" method="POST" class="row g-2">
+                            <div class="col-4">
+                                <select name="from_wallet" class="form-select">
+                                    {% for w in wallets %}
+                                        <option value="{{ w.id }}">{{ w.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <select name="to_wallet" class="form-select">
+                                    {% for w in wallets %}
+                                        <option value="{{ w.id }}">{{ w.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3"><input name="amount" class="form-control" placeholder="Jumlah" type="number" step="0.01"></div>
+                            <div class="col-1"><button class="btn btn-primary w-100">OK</button></div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <!-- Budgets -->
+                <div class="card mt-3">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="fas fa-wallet"></i> Anggaran (Budget)
+                    </div>
+                    <div class="card-body">
+                        <div class="panel-scroll">
+                        {% if budgets_status %}
+                            <ul class="list-group mb-3">
+                                {% for b in budgets_status %}
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between">
+                                            <div>Kategori ID: {{ b.category_id }} — Bulan: {{ b.month }}/{{ b.year }}</div>
+                                            <div>Rp {{ "{:,.0f}".format(b.spent) }} / Rp {{ "{:,.0f}".format(b.limit) }}</div>
+                                        </div>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar {% if b.status=='over' %}bg-danger{% elif b.status=='near' %}bg-warning{% else %}bg-success{% endif %}" role="progressbar" style="width: {{ b.percent|round(0) if b.percent<=100 else 100 }}%"></div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="text-muted">Belum ada anggaran.</div>
+                        {% endif %}
+
+                        <form action="/add_budget" method="POST" class="row g-2">
+                            <div class="col-6">
+                                <select name="category_id" class="form-select">
+                                    {% for c in categories %}
+                                        <option value="{{ c.id }}">{{ c.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-3"><input name="limit" class="form-control" placeholder="Limit (Rp)" type="number" step="0.01"></div>
+                            <div class="col-2"><input name="month" class="form-control" placeholder="Bln" type="number" min="1" max="12"></div>
+                            <div class="col-1"><button class="btn btn-dark w-100">Tambah</button></div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- Recurring -->
+                    <div class="card mt-3">
+                        <div class="card-header bg-light">
+                            <i class="fas fa-redo"></i> Transaksi Berulang
+                        </div>
+                        <div class="card-body">
+                                <div class="panel-scroll">
+                                {% if recurring %}
+                                    <ul class="list-group mb-3">
+                                        {% for r in recurring %}
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>{{ r.description }} — Rp {{ "{:,.0f}".format(r.amount) }} ({{ r.frequency }})</div>
+                                                <div class="small text-muted">Last: {{ r.last_run if r.last_run else '-' }}</div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <div class="text-muted mb-3">Belum ada transaksi berulang.</div>
+                                {% endif %}
+
+                                <form action="/add_recurring" method="POST" class="row g-2">
+                                    <div class="col-12 col-sm-6 col-md-5"><input name="description" class="form-control" placeholder="Deskripsi"></div>
+                                    <div class="col-6 col-md-2"><input name="amount" class="form-control" placeholder="Jumlah" type="number" step="0.01"></div>
+                                    <div class="col-6 col-sm-6 col-md-2">
+                                        <select name="type" class="form-select">
+                                            <option value="expense">Pengeluaran</option>
+                                            <option value="income">Pemasukan</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-2">
+                                        <select name="frequency" class="form-select">
+                                            <option value="daily">Harian</option>
+                                            <option value="weekly">Mingguan</option>
+                                            <option value="monthly" selected>Bulanan</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-1"><button class="btn btn-primary w-100">OK</button></div>
+                                </form>
+                                </div>
+>>>>>>> 13c29d4 (Add category charts for income and expense)
                         </div>
                     </div>
 
@@ -343,15 +471,86 @@
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <footer>
                     <p>&copy; 2024 Personal Finance Manager | <i class="fas fa-chart-line"></i> Atur keuanganmu dengan bijak</p>
                 </footer>
+=======
+            <!-- Transaction List -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <i class="fas fa-list"></i> Daftar Transaksi
+                    </div>
+                    <div class="card-body">
+                                <!-- Category charts -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <div class="card mb-2">
+                                            <div class="card-header">Pemasukan per Kategori</div>
+                                            <div class="card-body"><canvas id="incomeChart"></canvas></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card mb-2">
+                                            <div class="card-header">Pengeluaran per Kategori</div>
+                                            <div class="card-body"><canvas id="expenseChart"></canvas></div>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% if transactions %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tanggal</th>
+                                            <th>Deskripsi</th>
+                                            <th>Jumlah</th>
+                                            <th>Tipe</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for transaction in transactions|reverse %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ transaction.date[:16] if transaction.date else "-" }}</td>
+                                            <td class="description">{{ transaction.description }}</td>
+                                            <td>Rp {{ "{:,.0f}".format(transaction.amount) }}</td>
+                                            <td>
+                                                {% if transaction.type == 'income' %}
+                                                    <span class="badge bg-success">Pemasukan</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Pengeluaran</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="/delete/{{ transaction.id }}" class="btn btn-sm btn-danger btn-delete" onclick="return confirm('Hapus transaksi ini?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center text-muted py-5">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <p>Belum ada transaksi. Silakan tambah transaksi pertama Anda!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+>>>>>>> 13c29d4 (Add category charts for income and expense)
             </div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
         <script>
         function attachCurrencyBehavior(){
             function formatValue(v){
@@ -413,5 +612,42 @@
                 }catch(e){ console.error(e); }
             });
         </script>
+=======
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data from server
+        const incomeLabels = {{ income_labels|tojson }} || [];
+        const incomeValues = {{ income_values|tojson }} || [];
+        const incomeColors = {{ income_colors|tojson }} || [];
+
+        const expenseLabels = {{ expense_labels|tojson }} || [];
+        const expenseValues = {{ expense_values|tojson }} || [];
+        const expenseColors = {{ expense_colors|tojson }} || [];
+
+        function renderDoughnut(id, labels, data, colors) {
+            const ctx = document.getElementById(id).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: { legend: { position: 'bottom' } },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        if (incomeLabels.length) renderDoughnut('incomeChart', incomeLabels, incomeValues, incomeColors);
+        if (expenseLabels.length) renderDoughnut('expenseChart', expenseLabels, expenseValues, expenseColors);
+    </script>
+>>>>>>> 13c29d4 (Add category charts for income and expense)
 </body>
 </html>

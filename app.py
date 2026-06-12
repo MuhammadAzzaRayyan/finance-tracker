@@ -195,17 +195,64 @@ def index():
             flash(f"Anggaran kategori {b['category_id']} mendekati batas: Rp {b['spent']:.0f} / Rp {b['limit']:.0f}", 'warning')
         elif b['status'] == 'over':
             flash(f"Anggaran kategori {b['category_id']} terlampaui: Rp {b['spent']:.0f} / Rp {b['limit']:.0f}", 'danger')
+    # Prepare category breakdowns for charts
+    categories = data.get('categories', [])
+    # map category id -> info
+    cat_map = {c['id']: {'name': c.get('name', str(c.get('id'))), 'color': c.get('color', '#888')} for c in categories}
+    cat_map[0] = {'name': 'Umum', 'color': '#cccccc'}
+
+    income_totals = {}
+    expense_totals = {}
+    for t in data.get('transactions', []):
+        cid = t.get('category_id', 0) or 0
+        try:
+            amt = float(t.get('amount', 0))
+        except Exception:
+            amt = 0
+        if t.get('type') == 'income':
+            income_totals[cid] = income_totals.get(cid, 0) + amt
+        else:
+            expense_totals[cid] = expense_totals.get(cid, 0) + amt
+
+    # build lists for charting (only categories with non-zero amounts)
+    income_labels, income_values, income_colors = [], [], []
+    for cid, amt in income_totals.items():
+        if amt <= 0:
+            continue
+        info = cat_map.get(cid, {'name': str(cid), 'color': '#888'})
+        income_labels.append(info['name'])
+        income_values.append(amt)
+        income_colors.append(info.get('color', '#888'))
+
+    expense_labels, expense_values, expense_colors = [], [], []
+    for cid, amt in expense_totals.items():
+        if amt <= 0:
+            continue
+        info = cat_map.get(cid, {'name': str(cid), 'color': '#888'})
+        expense_labels.append(info['name'])
+        expense_values.append(amt)
+        expense_colors.append(info.get('color', '#888'))
+
     return render_template('index.html', 
                          transactions=data['transactions'],
                          balance=balance,
-                         categories=data.get('categories', []),
+                         categories=categories,
                          wallets=wallets,
                          budgets=data.get('budgets', []),
                          budgets_status=budgets_status,
                          recurring=data.get('recurring', []),
+<<<<<<< HEAD
                          chart_income=income_total,
                          chart_expense=expense_total,
                          chart_category_totals=category_totals)
+=======
+                         income_labels=income_labels,
+                         income_values=income_values,
+                         income_colors=income_colors,
+                         expense_labels=expense_labels,
+                         expense_values=expense_values,
+                         expense_colors=expense_colors)
+>>>>>>> 13c29d4 (Add category charts for income and expense)
 
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
