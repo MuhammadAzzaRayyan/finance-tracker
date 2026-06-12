@@ -42,3 +42,76 @@ body{
 @media (max-width: 991px){
     .sidebar{display:none}
 }
+
+/* Card footer and boxing improvements for action placement */
+.card .card-body.d-flex {
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border-top: 1px solid rgba(0,0,0,0.04);
+}
+
+/* Ensure forms pushed to bottom inside card */
+.card .mt-auto {
+    margin-top: auto !important;
+}
+
+/* Tidy box spacing */
+.card { overflow: hidden; }
+.card .list-group { margin: 0; border-radius: 8px; }
+
+
+/* Accessibility and touch targets: make buttons easier to read and press */
+button, .btn {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+    min-height: 40px;
+    border-radius: 8px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.btn-sm {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+    min-height: 36px;
+}
+
+/* Ensure full-width action buttons are comfortable to tap */
+.w-100.btn, .btn.w-100 {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+/* Override any accidental vertical text or rotation from other styles */
+button, .btn, a.btn {
+    writing-mode: horizontal-tb !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    -ms-transform: none !important;
+}
+
+/* Small form-action column (like OK buttons) should be readable */
+.col-1 > .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.6rem;
+}
+
+/* Improve contrast for small danger buttons */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #c82333;
+    color: #fff;
+}
+
