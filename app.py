@@ -372,16 +372,24 @@ def export_csv():
 @app.route('/delete/<int:transaction_id>')
 def delete_transaction(transaction_id):
     data = load_data()
+<<<<<<< HEAD
     
     # Hapus transaksi berdasarkan ID
     data['transactions'] = [t for t in data['transactions'] if t['id'] != transaction_id]
     data['balance'] = recalculate_balance(data['transactions'])
     
+=======
+    # Hapus transaksi berdasarkan ID
+    data['transactions'] = [t for t in data.get('transactions', []) if t.get('id') != transaction_id]
+    # Recalculate balance using full data structure
+    data['balance'] = recalculate_balance(data)
+>>>>>>> 8d3d79b (Fix delete/clear_all; add test_runner.py; run tests)
     save_data(data)
     return redirect(url_for('index'))
 
 @app.route('/clear-all')
 def clear_all():
+<<<<<<< HEAD
     # Hapus semua transaksi
     default_data = {
         "transactions": [],
@@ -389,6 +397,14 @@ def clear_all():
         "next_id": 1
     }
     save_data(default_data)
+=======
+    # Hapus semua transaksi but preserve categories, wallets, and other config
+    data = load_data()
+    data['transactions'] = []
+    data['next_id'] = 1
+    # Optionally reset recurring/budgets if you want; keep as-is for now
+    save_data(data)
+>>>>>>> 8d3d79b (Fix delete/clear_all; add test_runner.py; run tests)
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

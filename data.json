@@ -1,5 +1,40 @@
 {
+<<<<<<< HEAD
     "transactions": [],
+=======
+    "transactions": [
+        {
+            "id": 2,
+            "description": "Transfer ke 2",
+            "amount": 10.0,
+            "type": "expense",
+            "date": "2026-06-12 16:40:00",
+            "wallet_id": 1,
+            "category_id": 0,
+            "subcategory": "Transfer"
+        },
+        {
+            "id": 3,
+            "description": "Transfer dari 1",
+            "amount": 10.0,
+            "type": "income",
+            "date": "2026-06-12 16:40:00",
+            "wallet_id": 2,
+            "category_id": 0,
+            "subcategory": "Transfer"
+        },
+        {
+            "id": 4,
+            "description": "Rec Test (recurring)",
+            "amount": 5.0,
+            "type": "expense",
+            "date": "2026-06-12 16:40:00",
+            "wallet_id": 1,
+            "category_id": 1,
+            "subcategory": ""
+        }
+    ],
+>>>>>>> 8d3d79b (Fix delete/clear_all; add test_runner.py; run tests)
     "categories": [
         {
             "id": 1,
@@ -44,6 +79,7 @@
             "id": 2,
             "name": "Bank A",
             "initial_balance": 0
+<<<<<<< HEAD
         }
     ],
     "recurring": [],
@@ -60,4 +96,33 @@
     "next_category_id": 4,
     "next_subcategory_id": 101,
     "next_wallet_id": 3
+=======
+        },
+        {
+            "id": 3,
+            "name": "Wallet Test",
+            "initial_balance": 50.0
+        }
+    ],
+    "recurring": [
+        {
+            "id": 1,
+            "description": "Rec Test",
+            "amount": 5.0,
+            "type": "expense",
+            "wallet_id": 1,
+            "category_id": 1,
+            "subcategory": "",
+            "frequency": "daily",
+            "last_run": "2026-06-12 16:40:00"
+        }
+    ],
+    "budgets": [],
+    "next_id": 5,
+    "next_category_id": 3,
+    "next_subcategory_id": 101,
+    "next_wallet_id": 4,
+    "next_recurring_id": 2,
+    "balance": 0
+>>>>>>> 8d3d79b (Fix delete/clear_all; add test_runner.py; run tests)
 }
