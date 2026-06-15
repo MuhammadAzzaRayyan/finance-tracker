@@ -282,16 +282,22 @@ def add_budget():
     except ValueError:
         month = datetime.now().month
         year = datetime.now().year
+    # ensure budgets have their own id tracker (next_budget_id) to avoid colliding with category ids
+    if 'next_budget_id' not in data:
+        # compute a safe start based on existing budgets
+        existing = [b.get('id', 0) for b in data.get('budgets', [])]
+        data['next_budget_id'] = (max(existing) + 1) if existing else 1
+
     new_budget = {
-        'id': data.get('next_category_id', 1000),
+        'id': data.get('next_budget_id'),
         'category_id': category_id,
         'limit': limit,
         'month': month,
         'year': year
     }
     data.setdefault('budgets', []).append(new_budget)
-    # increment a standalone id tracker for budgets
-    data['next_category_id'] = data.get('next_category_id', 1000) + 1
+    # increment the budget id tracker
+    data['next_budget_id'] = data.get('next_budget_id', 1) + 1
     save_data(data)
     return redirect(url_for('index'))
 
