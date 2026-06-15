@@ -91,7 +91,6 @@
                                     <div class="mb-3">
                                         <label class="form-label">Kategori</label>
                                         <select name="category_id" class="form-select category-select">
-                                            <option value="0">Umum</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -370,8 +369,8 @@
             const select = form.querySelector('.category-select');
             if(!select) return;
             const type = (form.querySelector('select[name="type"]')||{}).value || 'expense';
-            // clear existing (keep Umum)
-            select.innerHTML = '<option value="0">Umum</option>';
+            // clear existing
+            select.innerHTML = '';
             const list = type === 'income' ? incomeCategories : expenseCategories;
             list.forEach(c=>{
                 const opt = document.createElement('option');
