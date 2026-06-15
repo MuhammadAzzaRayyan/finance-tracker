@@ -227,4 +227,17 @@ button, .btn, a.btn {
 .budget-panel .col-2 form { margin: 0; }
 .budget-panel .col-2 .btn { white-space: normal; }
 
+/* More compact spacing for budget panel without increasing horizontal width */
+.budget-panel .list-group-item { padding: .35rem .45rem; }
+.budget-panel .row.gx-1 > [class*=col-] { padding-left: .25rem; padding-right: .25rem; }
+.budget-panel .form-select.form-select-sm, .budget-panel .form-control-sm { padding: .2rem .35rem; }
+.budget-panel .small { font-size: 0.78rem; line-height:1.05; }
+.budget-panel .progress { height:6px; }
+.budget-panel .col-4 .text-muted { font-size:0.75rem; }
+.budget-panel .list-group-item .row + .row { margin-top: .35rem; }
+.budget-panel .badge { min-width: 36px; display:inline-block; text-align:center; }
+.budget-panel .col-5 { word-break: break-word; }
+.budget-panel .col-4 { word-break: break-word; }
+.budget-panel .btn-sm { padding: .25rem .4rem; }
+
 
