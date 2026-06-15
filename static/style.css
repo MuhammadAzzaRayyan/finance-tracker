@@ -198,3 +198,33 @@ button, .btn, a.btn {
 .btn-delete { display:inline-block; float: right; margin-left: 8px; position: relative; z-index: 5; }
 .table td .badge { display: inline-block; margin-right: 8px; }
 
+/* Budgets: scoped styles to avoid truncation and overlapping buttons while keeping same horizontal width */
+.budget-panel .form-select, .budget-panel .form-control-sm {
+    font-size: 0.92rem;
+    padding: 0.35rem 0.5rem;
+}
+.budget-panel .btn-sm {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.45rem;
+    min-height: 32px;
+    border-radius: 6px;
+}
+.budget-panel .list-group-item {
+    overflow: visible;
+    white-space: normal;
+}
+.budget-panel .small {
+    white-space: normal;
+}
+.budget-panel .col-5, .budget-panel .col-4 {
+    overflow: visible;
+}
+.budget-panel .col-4 .text-muted { white-space: normal; }
+.budget-panel .badge { font-size: 0.75rem; padding: .25rem .4rem; }
+.budget-panel .row { align-items: center; }
+
+/* reduce button width pressure by allowing the action column to stack buttons vertically on small heights */
+.budget-panel .col-2 form { margin: 0; }
+.budget-panel .col-2 .btn { white-space: normal; }
+
+
