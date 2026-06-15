@@ -212,6 +212,8 @@ def index():
             flash(f"Anggaran kategori {b['category_id']} terlampaui: Rp {b['spent']:.0f} / Rp {b['limit']:.0f}", 'danger')
     # Prepare category breakdowns for charts
     categories = data.get('categories', [])
+    # map id -> name for templates
+    category_map = {c['id']: c.get('name', '') for c in categories}
     # map category id -> info
     cat_map = {c['id']: {'name': c.get('name', str(c.get('id'))), 'color': c.get('color', '#888')} for c in categories}
     cat_map[0] = {'name': 'Umum', 'color': '#cccccc'}
@@ -263,7 +265,8 @@ def index():
                          expense_values=expense_values,
                          expense_colors=expense_colors,
                          income_categories=income_categories,
-                         expense_categories=expense_categories)
+                         expense_categories=expense_categories,
+                         category_map=category_map)
 
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
@@ -326,6 +329,18 @@ def add_recurring():
     data.setdefault('recurring', []).append(r)
     data['next_recurring_id'] = data.get('next_recurring_id', 1) + 1
     save_data(data)
+    return redirect(url_for('index'))
+
+
+@app.route('/delete_budget/<int:budget_id>', methods=['POST'])
+def delete_budget(budget_id):
+    data = load_data()
+    before = len(data.get('budgets', []))
+    data['budgets'] = [b for b in data.get('budgets', []) if b.get('id') != budget_id]
+    after = len(data.get('budgets', []))
+    if after != before:
+        save_data(data)
+        flash('Anggaran dihapus', 'success')
     return redirect(url_for('index'))
 
 @app.route('/add', methods=['POST'])
