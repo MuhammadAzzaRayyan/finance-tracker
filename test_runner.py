@@ -56,9 +56,9 @@ def run_tests():
                 failures += 1
 
         # Test add wallet
-        r = client.post('/add_wallet', data={'name':'Wallet Test','initial':'50'}, follow_redirects=True)
         d = load_data()
-        wallet_added = any(w['name'] == 'Wallet Test' for w in d.get('wallets', []))
+            r = client.post('/add_wallet', data={'name':'E-Wallet','initial':'50'}, follow_redirects=True)
+            wallet_added = any(w['name'] == 'E-Wallet' for w in d.get('wallets', []))
         if not ok('Add wallet', wallet_added):
             failures += 1
 
