@@ -77,7 +77,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Jumlah (Rp)</label>
-                                        <input type="number" name="amount" class="form-control" placeholder="0" step="0.01" required>
+                                        <input type="text" name="amount_display" data-raw-name="amount" class="form-control currency" placeholder="Rp 0" required>
+                                        <input type="hidden" name="amount" class="currency-raw">
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Dompet</label>
@@ -89,11 +90,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Kategori</label>
-                                        <select name="category_id" class="form-select">
+                                        <select name="category_id" class="form-select category-select">
                                             <option value="0">Umum</option>
-                                            {% for c in categories %}
-                                                <option value="{{ c.id }}">{{ c.name }}</option>
-                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -124,9 +122,10 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
-                                <form action="/add_wallet" method="POST" class="row g-2 mb-2">
+                                <form action="/add_wallet" method="POST" class="row g-2 mb-2 wallet-form">
                                     <div class="col-6"><input name="name" placeholder="Nama dompet" class="form-control"></div>
-                                    <div class="col-4"><input name="initial" placeholder="Saldo awal" class="form-control" type="number" step="0.01"></div>
+                                    <div class="col-4"><input name="initial_display" data-raw-name="initial" placeholder="Rp 0" class="form-control currency"></div>
+                                    <input type="hidden" name="initial" class="currency-raw">
                                     <div class="col-2"><button class="btn btn-sm btn-success w-100">Tambah</button></div>
                                 </form>
 
@@ -145,7 +144,8 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="col-3"><input name="amount" class="form-control" placeholder="Jumlah" type="number" step="0.01"></div>
+                                    <div class="col-3"><input name="transfer_amount_display" data-raw-name="amount" class="form-control currency" placeholder="Rp 0" type="text"></div>
+                                    <input type="hidden" name="amount" class="currency-raw">
                                     <div class="col-1"><button class="btn btn-primary w-100">OK</button></div>
                                 </form>
                             </div>
@@ -185,7 +185,8 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="col-3"><input name="limit" class="form-control" placeholder="Limit (Rp)" type="number" step="0.01"></div>
+                                    <div class="col-3"><input name="limit_display" data-raw-name="limit" class="form-control currency" placeholder="Rp 0" type="text"></div>
+                                    <input type="hidden" name="limit" class="currency-raw">
                                     <div class="col-2"><input name="month" class="form-control" placeholder="Bln" type="number" min="1" max="12"></div>
                                     <div class="col-1"><button class="btn btn-dark w-100">Tambah</button></div>
                                 </form>
@@ -215,7 +216,8 @@
 
                                         <form action="/add_recurring" method="POST" class="row g-2">
                                             <div class="col-12 col-sm-6 col-md-5"><input name="description" class="form-control" placeholder="Deskripsi"></div>
-                                            <div class="col-6 col-md-2"><input name="amount" class="form-control" placeholder="Jumlah" type="number" step="0.01"></div>
+                                            <div class="col-6 col-md-2"><input name="recurring_amount_display" data-raw-name="amount" class="form-control currency" placeholder="Rp 0" type="text"></div>
+                                            <input type="hidden" name="amount" class="currency-raw">
                                             <div class="col-6 col-sm-6 col-md-2">
                                                 <select name="type" class="form-select">
                                                     <option value="expense">Pengeluaran</option>
@@ -315,6 +317,77 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Currency formatting helpers: show `Rp ` + dot separated thousands in inputs,
+        // and populate hidden `.currency-raw` fields with plain numeric values on submit.
+        function digitsOnly(s){ return (s||'').replace(/[^0-9]/g,''); }
+        function formatWithDots(s){ if(!s) return '0'; return s.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+        function formatCurrencyDisplay(numStr){ if(!numStr) return 'Rp. 0'; return 'Rp. ' + formatWithDots(numStr); }
+
+        function attachCurrencyHandlers(){
+            document.querySelectorAll('.currency').forEach(input=>{
+                // show formatted value on load if it has a numeric value
+                if(input.value){ const d = digitsOnly(input.value); input.value = formatCurrencyDisplay(d); }
+                input.addEventListener('focus', (e)=>{
+                    const d = digitsOnly(e.target.value); e.target.value = d ? d : '';
+                    // place caret at end
+                    setTimeout(()=>{ if(e.target.setSelectionRange) e.target.setSelectionRange(e.target.value.length, e.target.value.length); },0);
+                });
+                input.addEventListener('input', (e)=>{
+                    const raw = digitsOnly(e.target.value);
+                    // temporarily show raw while user types, but prevent non-digit
+                    e.target.value = raw;
+                });
+                input.addEventListener('blur', (e)=>{
+                    const raw = digitsOnly(e.target.value);
+                    e.target.value = formatCurrencyDisplay(raw);
+                });
+            });
+
+            // On form submit, transfer display values to hidden raw inputs inside the same form
+            document.querySelectorAll('form').forEach(form=>{
+                form.addEventListener('submit', (ev)=>{
+                    form.querySelectorAll('.currency').forEach(display=>{
+                        const rawName = display.dataset.rawName || display.name.replace(/_display$/,'');
+                        const hidden = form.querySelector('input[name="'+rawName+'"].currency-raw');
+                        const val = digitsOnly(display.value);
+                        if(hidden){ hidden.value = val ? val : 0; }
+                        else {
+                            // create hidden if missing
+                            const h = document.createElement('input');
+                            h.type='hidden'; h.name=rawName; h.className='currency-raw'; h.value = val?val:0; form.appendChild(h);
+                        }
+                    });
+                });
+            });
+        }
+
+        attachCurrencyHandlers();
+
+        // Category filtering by selected type (only for the add-transaction form)
+        const incomeCategories = {{ income_categories|tojson }} || [];
+        const expenseCategories = {{ expense_categories|tojson }} || [];
+        function populateCategoryOptions(form){
+            const select = form.querySelector('.category-select');
+            if(!select) return;
+            const type = (form.querySelector('select[name="type"]')||{}).value || 'expense';
+            // clear existing (keep Umum)
+            select.innerHTML = '<option value="0">Umum</option>';
+            const list = type === 'income' ? incomeCategories : expenseCategories;
+            list.forEach(c=>{
+                const opt = document.createElement('option');
+                opt.value = c.id; opt.textContent = c.name; select.appendChild(opt);
+            });
+        }
+        // attach to add-transaction form
+        (function(){
+            const form = document.querySelector('form[action="/add"]');
+            if(!form) return;
+            const typeSel = form.querySelector('select[name="type"]');
+            // populate initial
+            populateCategoryOptions(form);
+            if(typeSel) typeSel.addEventListener('change', ()=> populateCategoryOptions(form));
+        })();
+
         const incomeLabels = {{ income_labels|tojson }} || [];
         const incomeValues = {{ income_values|tojson }} || [];
         const incomeColors = {{ income_colors|tojson }} || [];

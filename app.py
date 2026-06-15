@@ -8,6 +8,15 @@ import csv
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 
+
+@app.context_processor
+def inject_static_version():
+    try:
+        v = int(os.path.getmtime(os.path.join(app.root_path, 'static', 'style.css')))
+    except Exception:
+        v = int(datetime.now().timestamp())
+    return dict(static_version=v)
+
 DATA_FILE = 'data.json'
 
 # Fungsi untuk memuat data dari file JSON
@@ -173,6 +182,12 @@ def index():
     wallets = recalculate_wallets(data)
     balance = recalculate_balance(data)
     budgets_status = compute_budget_status(data)
+    # prepare separate category lists for income and expense for UI filtering
+    categories = data.get('categories', [])
+    income_category_names = {'Uang Bulanan', 'Uang Beasiswa', 'Uang Kerja'}
+    expense_category_names = {'Makan dan Minum', 'Transportasi', 'Gaya Hidup'}
+    income_categories = [c for c in categories if c.get('name') in income_category_names]
+    expense_categories = [c for c in categories if c.get('name') in expense_category_names]
     # Compute totals for charts: total income vs expense and expense per category
     income_total = 0.0
     expense_total = 0.0
@@ -246,7 +261,9 @@ def index():
                          income_colors=income_colors,
                          expense_labels=expense_labels,
                          expense_values=expense_values,
-                         expense_colors=expense_colors)
+                         expense_colors=expense_colors,
+                         income_categories=income_categories,
+                         expense_categories=expense_categories)
 
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
