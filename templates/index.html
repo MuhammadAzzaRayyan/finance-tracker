@@ -162,8 +162,7 @@
                                     <div class="row gx-1 align-items-center mb-2 fw-bold small">
                                         <div class="col-5">Kategori</div>
                                         <div class="col-4">Jumlah (Rp)</div>
-                                        <div class="col-1"></div>
-                                        <div class="col-2"></div>
+                                        <div class="col-3"></div>
                                     </div>
 
                                     <!-- Add budget (compact single-row form) -->
@@ -187,18 +186,20 @@
                                         <div class="list-group">
                                             {% for b in budgets_status %}
                                                 <div class="list-group-item py-2">
-                                                    <div class="row gx-1 align-items-center">
+                                                    <div class="row gx-1 align-items-start">
                                                         <div class="col-5 small">
                                                             {% for c in categories %}{% if c.id==b.category_id %}{{ c.name }}{% endif %}{% endfor %}
                                                         </div>
-                                                        <div class="col-4 small">
-                                                            Rp {{ "{:,.0f}".format(b.limit).replace(',', '.') }}
-                                                            <div class="small text-muted">Terpakai: Rp {{ "{:,.0f}".format(b.spent).replace(',', '.') }}</div>
+                                                        <div class="col-4 small d-flex justify-content-between">
+                                                            <div>
+                                                                Rp {{ "{:,.0f}".format(b.limit).replace(',', '.') }}
+                                                                <div class="small text-muted">Terpakai: Rp {{ "{:,.0f}".format(b.spent).replace(',', '.') }}</div>
+                                                            </div>
+                                                            <div class="ms-2">
+                                                                <span class="badge {% if b.status=='over' %}bg-danger{% elif b.status=='near' %}bg-warning text-dark{% else %}bg-success{% endif %}">{{ b.percent|round(0) }}%</span>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-1 small text-center">
-                                                            <span class="badge {% if b.status=='over' %}bg-danger{% elif b.status=='near' %}bg-warning text-dark{% else %}bg-success{% endif %}">{{ b.percent|round(0) }}%</span>
-                                                        </div>
-                                                        <div class="col-2">
+                                                        <div class="col-3">
                                                             <form action="/delete_budget" method="POST" onsubmit="return confirm('Hapus anggaran?');">
                                                                 <input type="hidden" name="budget_id" value="{{ b.id }}">
                                                                 <button class="btn btn-sm btn-danger w-100">Hapus</button>

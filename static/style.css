@@ -261,12 +261,11 @@ button, .btn, a.btn {
 /* Rebalance internal column widths inside the Anggaran panel so text has more room
     without expanding the overall card width. These set percentage widths for
     the existing bootstrap column classes when inside .budget-panel. */
-.budget-panel .col-5 { flex: 0 0 58% !important; max-width: 58% !important; }
-.budget-panel .col-4 { flex: 0 0 28% !important; max-width: 28% !important; }
-.budget-panel .col-1 { flex: 0 0 6% !important; max-width: 6% !important; }
-.budget-panel .col-2 { flex: 0 0 8% !important; max-width: 8% !important; }
+.budget-panel .col-5 { flex: 0 0 56% !important; max-width: 56% !important; }
+.budget-panel .col-4 { flex: 0 0 34% !important; max-width: 34% !important; }
+.budget-panel .col-3 { flex: 0 0 10% !important; max-width: 10% !important; }
 
-.budget-panel .list-group-item .col-2 { display:flex; align-items:center; justify-content:center; }
+.budget-panel .list-group-item .col-3 { display:flex; align-items:center; justify-content:center; }
 .budget-panel .badge { font-size: .72rem; padding: .2rem .35rem; }
 
 
