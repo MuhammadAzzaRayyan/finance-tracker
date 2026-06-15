@@ -43,7 +43,7 @@ body{
     width:36px;height:24px;background:var(--primary);border-radius:4px;display:inline-block;
 }
 .sidebar{
-    width:220px;
+    width:260px; /* slightly wider to give content space */
     padding-top:1rem;
     min-height:calc(100vh - 56px);
     background:transparent;
@@ -54,7 +54,12 @@ body{
 }
 .sidebar .nav-link{color:#222;padding:.6rem 1rem;border-radius:8px}
 .sidebar .nav-link.active,.sidebar .nav-link:hover{background:#fff;box-shadow:0 1px 6px rgba(16,24,40,0.06)}
-.content-area{padding:1.25rem; margin-left:240px; /* reserve space for fixed sidebar */}
+.content-area{padding:1.25rem; margin-left:280px; /* reserve space for fixed sidebar */}
+
+/* Left column fixes: ensure cards in left column have room and scroll if content exceeds */
+.content-area .col-md-4 { max-width: 420px; }
+.wallets-row, .panel-scroll { max-height: 320px; overflow-y: auto; }
+.card.mt-3 { overflow: visible; }
 
 /* Ensure main container stretches under navbar and avoids extra empty space */
 .container-fluid{
