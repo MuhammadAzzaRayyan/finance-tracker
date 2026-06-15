@@ -296,6 +296,19 @@ def add_budget():
     return redirect(url_for('index'))
 
 
+@app.route('/delete_budget', methods=['POST'])
+def delete_budget():
+    data = load_data()
+    try:
+        budget_id = int(request.form.get('budget_id', 0))
+    except ValueError:
+        budget_id = 0
+    if budget_id:
+        data['budgets'] = [b for b in data.get('budgets', []) if b.get('id') != budget_id]
+        save_data(data)
+    return redirect(url_for('index'))
+
+
 @app.route('/add_recurring', methods=['POST'])
 def add_recurring():
     data = load_data()
