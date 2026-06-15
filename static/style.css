@@ -240,4 +240,22 @@ button, .btn, a.btn {
 .budget-panel .col-4 { word-break: break-word; }
 .budget-panel .btn-sm { padding: .25rem .4rem; }
 
+/* Prevent button text wrapping and ensure centered inline buttons in budget panel */
+.budget-panel .col-1 > .btn, .budget-panel .col-2 > .btn, .budget-panel .btn-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    word-break: normal;
+    padding: .18rem .38rem;
+    font-size: .82rem;
+    line-height: 1;
+    min-height: 32px;
+    height: auto;
+}
+.budget-panel form.row { display:flex; align-items:center; }
+.budget-panel form .col-5, .budget-panel form .col-4 { flex: 0 0 auto; }
+.budget-panel form .col-1 { display:flex; align-items:center; justify-content:center; }
+.budget-panel .form-select.form-select-sm, .budget-panel .form-control-sm { max-width: 100%; }
+
 
