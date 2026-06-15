@@ -6,11 +6,24 @@
     --muted:#6c757d;
     --accent:#1f2937;
 }
+/* Normalize box sizing and base font */
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+*, *::before, *::after { box-sizing: inherit; }
+
+/* Base typography */
 body{
-    background:var(--bg);
-    font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    color:var(--accent);
-    margin:0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    font-family: Inter, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--accent);
+    line-height: 1.4;
+    font-size: 16px;
 }
 .app-navbar{
     background:#ffffff;
@@ -18,6 +31,10 @@ body{
     position:sticky;
     top:0;
     z-index:10;
+    height:56px;
+}
+.app-navbar .brand{
+    
 }
 .app-navbar .brand{
     display:flex;align-items:center;gap:.6rem;font-weight:700;color:var(--accent);
@@ -48,8 +65,21 @@ body{
 .balance-card{padding:1.2rem}
 .balance-amount{font-size:2rem;font-weight:700;color:#111}
 .small-muted{color:var(--muted)}
-.form-control, .form-select{border-radius:8px}
+.form-control, .form-select{border-radius:8px; font-size:0.95rem}
 .btn-primary{background:var(--primary);border-color:var(--primary)}
+
+/* Headings and text sizing for consistency */
+h1, h2, h3, h4, h5, h6 { margin: 0 0 0.5rem 0; font-weight: 600; }
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.1rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.95rem; }
+
+/* Reduce excessive spacing on small elements */
+.app-navbar .form-control { height:40px }
+.app-navbar .btn { height:40px }
 .progress{height:10px;border-radius:999px}
 .recurring-list .list-group-item{border-radius:8px}
 @media (max-width: 991px){
