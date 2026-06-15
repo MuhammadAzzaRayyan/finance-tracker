@@ -162,7 +162,7 @@ button, .btn, a.btn {
 .table {
     font-size: 0.98rem;
 }
-.table { table-layout: fixed; width: 100%; }
+.table { table-layout: auto; width: 100%; }
 .table th, .table td {
     padding: 0.9rem 1rem;
     vertical-align: middle;
@@ -182,9 +182,14 @@ button, .btn, a.btn {
 .content-area { padding: 1rem; }
 
 /* Column width allocations */
-.table th.col-desc, .table td.description { width: 60%; }
-.table th.col-date { width: 15%; }
+.table th.col-desc, .table td.description { width: 58%; }
+.table th.col-date { width: 16%; }
 .table th.col-amount { width: 12%; text-align: right; }
 .table th.col-type { width: 8%; }
-.table th.col-actions { width: 5%; text-align: center; }
+.table th.col-actions { width: 6%; text-align: center; }
+
+/* Ensure action buttons sit to the right and don't overlap content */
+.table td { position: relative; }
+.btn-delete { float: right; margin-left: 8px; position: relative; z-index: 5; }
+.table td .badge { display: inline-block; margin-right: 8px; }
 
