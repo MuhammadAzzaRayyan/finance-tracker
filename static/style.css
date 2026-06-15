@@ -26,11 +26,24 @@ body{
     width:36px;height:24px;background:var(--primary);border-radius:4px;display:inline-block;
 }
 .sidebar{
-    width:220px;padding-top:1rem;min-height:calc(100vh - 56px);background:transparent;
+    width:220px;
+    padding-top:1rem;
+    min-height:calc(100vh - 56px);
+    background:transparent;
+    position:fixed; /* keep sidebar fixed under navbar */
+    top:56px;
+    left:0;
+    z-index:5;
 }
 .sidebar .nav-link{color:#222;padding:.6rem 1rem;border-radius:8px}
 .sidebar .nav-link.active,.sidebar .nav-link:hover{background:#fff;box-shadow:0 1px 6px rgba(16,24,40,0.06)}
-.content-area{padding:1.25rem}
+.content-area{padding:1.25rem; margin-left:240px; /* reserve space for fixed sidebar */}
+
+/* Ensure main container stretches under navbar and avoids extra empty space */
+.container-fluid{
+    padding-top:12px;
+    min-height: calc(100vh - 56px);
+}
 .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);}
 .balance-card{padding:1.2rem}
 .balance-amount{font-size:2rem;font-weight:700;color:#111}
