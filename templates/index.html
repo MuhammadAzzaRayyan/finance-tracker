@@ -113,51 +113,38 @@
                                 <i class="fas fa-wallet"></i> Anggaran (Budget)
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-bordered align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th>Kategori</th>
-                                                <th>Jumlah (Rp)</th>
-                                                <th class="text-center">Tambah</th>
-                                                <th class="text-center">Hapus</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for b in budgets_status %}
-                                            <tr>
-                                                <td>
-                                                    {% for c in categories %}{% if c.id == b.category_id %}{{ c.name }}{% endif %}{% endfor %}
-                                                </td>
-                                                <td>Rp. {{ "{:,.0f}".format(b.limit).replace(',','.') }}</td>
-                                                <td class="text-center">&nbsp;</td>
-                                                <td class="text-center">
-                                                    <form action="/delete_budget/{{ b.id }}" method="POST" onsubmit="return confirm('Hapus anggaran ini?')">
-                                                        <button class="btn btn-sm btn-danger">Hapus</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                            <!-- Add new budget row -->
-                                            <tr>
-                                                <form action="/add_budget" method="POST">
-                                                <td>
-                                                    <select name="category_id" class="form-select">
-                                                        {% for c in expense_categories %}
-                                                            <option value="{{ c.id }}">{{ c.name }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input name="limit_display" data-raw-name="limit" class="form-control currency" placeholder="Rp 0" type="text">
-                                                    <input type="hidden" name="limit" class="currency-raw">
-                                                </td>
-                                                <td class="text-center"><button class="btn btn-sm btn-success">Tambah</button></td>
-                                                <td class="text-center">&nbsp;</td>
-                                                </form>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="list-group budget-list">
+                                    {% for b in budgets_status %}
+                                    <div class="list-group-item budget-row d-flex align-items-center">
+                                        <div class="budget-col-cat">{% if category_map.get(b.category_id) %}{{ category_map.get(b.category_id) }}{% else %}Kategori {{ b.category_id }}{% endif %}</div>
+                                        <div class="budget-col-amount">Rp. {{ "{:,.0f}".format(b.limit).replace(',','.') }}</div>
+                                        <div class="budget-col-add">&nbsp;</div>
+                                        <div class="budget-col-delete">
+                                            <form action="/delete_budget/{{ b.id }}" method="POST" onsubmit="return confirm('Hapus anggaran ini?')">
+                                                <button class="btn btn-sm btn-danger">Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+                                    <!-- Add new budget row -->
+                                    <form action="/add_budget" method="POST" class="list-group-item budget-row d-flex align-items-center">
+                                        <div class="budget-col-cat">
+                                            <select name="category_id" class="form-select">
+                                                {% for c in expense_categories %}
+                                                    <option value="{{ c.id }}">{{ c.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="budget-col-amount">
+                                            <input name="limit_display" data-raw-name="limit" class="form-control currency" placeholder="Rp 0" type="text">
+                                            <input type="hidden" name="limit" class="currency-raw">
+                                        </div>
+                                        <div class="budget-col-add">
+                                            <button class="btn btn-sm btn-success">Tambah</button>
+                                        </div>
+                                        <div class="budget-col-delete">&nbsp;</div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

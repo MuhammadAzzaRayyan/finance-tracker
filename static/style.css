@@ -198,3 +198,16 @@ button, .btn, a.btn {
 .btn-delete { display:inline-block; float: right; margin-left: 8px; position: relative; z-index: 5; }
 .table td .badge { display: inline-block; margin-right: 8px; }
 
+/* Budget compact list styles to prevent horizontal stretching */
+.budget-list { margin: 0; padding: 0; }
+.budget-row { display: flex; gap: 8px; align-items: center; padding: .5rem; }
+.budget-col-cat { flex: 2 1 0; min-width: 120px; }
+.budget-col-amount { flex: 1 0 0; text-align: right; min-width: 110px; }
+.budget-col-add, .budget-col-delete { flex: 0 0 72px; text-align: center; }
+.budget-col-add .btn, .budget-col-delete .btn { width: 64px; }
+.budget-row .form-select, .budget-row .form-control { height:36px; }
+
+/* Ensure budget box doesn't force horizontal scroll in layout */
+.budget-list { max-width: 100%; overflow: hidden; }
+
+
