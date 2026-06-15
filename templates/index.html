@@ -76,6 +76,18 @@
                                         <input type="text" name="description" class="form-control" placeholder="Contoh: Gaji, Makan, dll" required>
                                     </div>
                                     <div class="mb-3">
+                                        <label class="form-label">Tipe</label>
+                                        <select name="type" class="form-select">
+                                            <option value="income">💰 Pemasukan</option>
+                                            <option value="expense">💸 Pengeluaran</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Kategori</label>
+                                        <select name="category_id" class="form-select category-select">
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
                                         <label class="form-label">Jumlah (Rp)</label>
                                         <input type="text" name="amount_display" data-raw-name="amount" class="form-control currency" placeholder="Rp 0" required>
                                         <input type="hidden" name="amount" class="currency-raw">
@@ -86,18 +98,6 @@
                                             {% for w in wallets %}
                                                 <option value="{{ w.id }}">{{ w.name }} — Rp {{ "{:,.0f}".format(w.balance) }}</option>
                                             {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Kategori</label>
-                                        <select name="category_id" class="form-select category-select">
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Tipe</label>
-                                        <select name="type" class="form-select">
-                                            <option value="income">💰 Pemasukan</option>
-                                            <option value="expense">💸 Pengeluaran</option>
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100">
