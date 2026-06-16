@@ -397,28 +397,79 @@ def add_recurring():
 
 @app.route('/add', methods=['POST'])
 def add_transaction():
+    # 1. Ambil data dari form transaksi
+    amount_str = request.form.get('amount')
+    trans_type = request.form.get('type')
+    category = request.form.get('category')
+    description = request.form.get('description')
+    method = request.form.get('method')
+    
+    # 2. Ambil data limit baru dari borang (kalau pengguna sengaja ngisi/ngubah)
+    user_limit_str = request.form.get('daily_limit')
+    
     data = load_data()
+    
+    # JIKA pengguna mengetik angka limit baru di web, kita simpan secara permanen ke file JSON
+    if user_limit_str:
+        try:
+            data['saved_limit'] = float(user_limit_str)
+        except ValueError:
+            pass
+            
+    # Ambil nilai limit yang tersimpan. Kalau belum pernah diatur sama sekali, default-nya Rp 50.000
+    daily_limit = data.get('saved_limit', 50000.0)
 
-    description = request.form.get('description', '').strip()
-    amount_str = request.form.get('amount', '0')
-    trans_type = request.form.get('type', 'expense')
-    wallet_id = int(request.form.get('wallet_id', 1))
-    category_id = int(request.form.get('category_id', 0))
-    subcategory = request.form.get('subcategory', '')
+    # 3. Hitung total pengeluaran hari ini yang sudah ada di database
+    today = datetime.now()
+    daily_expense = 0.0
+    
+    for t in data.get('transactions', []):
+        if t.get('type') == 'expense':
+            try:
+                t_date = datetime.strptime(t.get('date'), '%Y-%m-%d').date()
+                if t_date == today:
+                    daily_expense += float(t.get('amount', 0))
+            except ValueError:
+                continue
 
-    if not description:
-        flash('Deskripsi wajib diisi', 'danger')
-        return redirect(url_for('index'))
-
+    # 4. Ambil nominal pengeluaran yang baru mau dimasukkan sekarang
     try:
-        amount = float(amount_str)
-        if amount <= 0:
-            flash('Jumlah harus > 0', 'danger')
-            return redirect(url_for('index'))
+        current_amount = float(amount_str)
     except ValueError:
-        flash('Jumlah tidak valid', 'danger')
-        return redirect(url_for('index'))
+        current_amount = 0.0
 
+    # Total akhir = pengeluaran seharian + pengeluaran baru ini
+    total_akhir = daily_expense + current_amount
+
+    # 5. Logika Notifikasi Peringatan (Tapi transaksi TETAP lanjut disimpan ke bawah)
+    if trans_type == 'expense':
+        # Kondisi A: Jika total pengeluaran MELEBIHI limit
+        if total_akhir > daily_limit:
+            flash(f'Pengeluaranmu melebihi limit harian Rp {daily_limit:,.0f}!', 'warning')
+        
+        # Kondisi B: Jika total pengeluaran PAS BANGET sama limit
+        elif total_akhir == daily_limit:
+            flash(f'Pengeluaranmu hari ini sudah mencapai limit Rp {daily_limit:,.0f}!', 'info')
+
+    # 6. PROSES SIMPAN: Transaksi baru tetap dimasukkan ke database, gak tertolak!
+    new_transaction = {
+        'id': len(data.get('transactions', [])) + 1,
+        'date': today.strftime('%Y-%m-%d %H:%M'),
+        'type': trans_type,
+        'category': category,
+        'amount': current_amount,
+        'description': description,
+        'method': method
+    }
+    
+    if 'transactions' not in data:
+        data['transactions'] = []
+    data['transactions'].append(new_transaction)
+    
+    # Tulis semua perubahan (termasuk limit baru dan transaksi baru) ke file JSON
+    save_data(data)
+
+    return redirect(url_for('index'))
     new_transaction = {
         'id': data.get('next_id', 1),
         'description': description,

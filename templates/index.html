@@ -75,6 +75,11 @@
  
                                 <form action="/add" method="POST">
                                     <div class="mb-3">
+                                        <label for="daily_limit" class="form-label font-weight-bold" style="color: #4e73df;">Atur / Ubah Limit Harian Anda (Rp)</label>
+                                        <input type="number" class="form-control" id="daily_limit" name="daily_limit" placeholder="Ketik di sini jika ingin mengubah limit harian, misal: 50000">
+                                        <small class="text-muted">Kosongkan saja jika tidak ingin mengubah limit yang sudah diatur sebelumnya.</small>
+                                    </div>
+                                    <div class="mb-3">
                                         <label class="form-label">Deskripsi</label>
                                         <input type="text" name="description" class="form-control" placeholder="Contoh: Gaji, Makan, dll" required>
                                     </div>
