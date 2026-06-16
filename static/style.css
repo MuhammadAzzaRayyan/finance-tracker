@@ -1,12 +1,12 @@
 /* Modern YouTube-like UI styles */
 :root{
-    /* Warm palette: terracotta primary, warm paper background */
-    --primary: #C2410C; /* terracotta */
-    --primary-600: #F97316; /* orange accent */
-    --bg: linear-gradient(135deg, #FFF7ED 0%, #FFFBF7 100%); /* soft warm cream */
-    --card: #FFFDF8; /* very light warm card */
-    --muted: #8B6B5A; /* warm muted brown */
-    --accent: #2B1F1A; /* deep warm brown for text */
+    /* Elegant palette: soft indigo primary, warm paper background */
+    --primary: #6D28D9; /* indigo-700 */
+    --primary-600: #7C3AED;
+    --bg: linear-gradient(135deg, #F3F4FF 0%, #FAF5FF 100%);
+    --card: #FFFFFF;
+    --muted: #6B7280;
+    --accent: #0F172A;
 }
 
 /* Normalize box sizing and base font */
