@@ -3,7 +3,7 @@
     /* Elegant palette: soft indigo primary, warm paper background */
     --primary: #6D28D9; /* indigo-700 */
     --primary-600: #7C3AED;
-    --bg: linear-gradient(135deg, #F3F4FF 0%, #FAF5FF 100%);
+    --bg: linear-gradient(135deg, #E6F0FF 0%, #D1E7FF 100%); /* stronger blue gradient */
     --card: #FFFFFF;
     --muted: #6B7280;
     --accent: #0F172A;
