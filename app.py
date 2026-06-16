@@ -7,7 +7,13 @@ import csv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
-
+@app.context_processor
+def inject_static_version():
+    try:
+        v = int(os.path.getmtime(os.path.join(app.root_path, 'static', 'style.css')))
+    except Exception:
+        v = int(datetime.now().timestamp())
+    return dict(static_version=v)
 DATA_FILE = 'data.json'
 
 # Fungsi untuk memuat data dari file JSON
@@ -173,21 +179,143 @@ def index():
     wallets = recalculate_wallets(data)
     balance = recalculate_balance(data)
     budgets_status = compute_budget_status(data)
+    # prepare separate category lists for income and expense for UI filtering
+    categories = data.get('categories', [])
+    income_category_names = {'Uang Bulanan', 'Uang Beasiswa', 'Uang Kerja'}
+    expense_category_names = {'Makan dan Minum', 'Transportasi', 'Gaya Hidup'}
+    income_categories = [c for c in categories if c.get('name') in income_category_names]
+    expense_categories = [c for c in categories if c.get('name') in expense_category_names]
+    # Compute totals for charts: total income vs expense and expense per category
+    income_total = 0.0
+    expense_total = 0.0
+    category_map = {c['id']: c.get('name', 'Umum') for c in data.get('categories', [])}
+    category_totals = {}
+    for t in data.get('transactions', []):
+        try:
+            amt = float(t.get('amount', 0))
+        except Exception:
+            amt = 0.0
+        if t.get('type') == 'income':
+            income_total += amt
+        else:
+            expense_total += amt
+            cname = category_map.get(t.get('category_id'), 'Umum')
+            category_totals[cname] = category_totals.get(cname, 0) + amt
     # flash notifications for budgets
     for b in budgets_status:
         if b['status'] == 'near':
             flash(f"Anggaran kategori {b['category_id']} mendekati batas: Rp {b['spent']:.0f} / Rp {b['limit']:.0f}", 'warning')
         elif b['status'] == 'over':
             flash(f"Anggaran kategori {b['category_id']} terlampaui: Rp {b['spent']:.0f} / Rp {b['limit']:.0f}", 'danger')
+    # Prepare category breakdowns for charts
+    categories = data.get('categories', [])
+    # map category id -> info
+    cat_map = {c['id']: {'name': c.get('name', str(c.get('id'))), 'color': c.get('color', '#888')} for c in categories}
+    cat_map[0] = {'name': 'Umum', 'color': '#cccccc'}
+
+    income_totals = {}
+    expense_totals = {}
+    for t in data.get('transactions', []):
+        cid = t.get('category_id', 0) or 0
+        try:
+            amt = float(t.get('amount', 0))
+        except Exception:
+            amt = 0
+        if t.get('type') == 'income':
+            income_totals[cid] = income_totals.get(cid, 0) + amt
+        else:
+            expense_totals[cid] = expense_totals.get(cid, 0) + amt
+
+    # build lists for charting (only categories with non-zero amounts)
+    income_labels, income_values, income_colors = [], [], []
+    for cid, amt in income_totals.items():
+        if amt <= 0:
+            continue
+        info = cat_map.get(cid, {'name': str(cid), 'color': '#888'})
+        income_labels.append(info['name'])
+        income_values.append(amt)
+        income_colors.append(info.get('color', '#888'))
+
+    expense_labels, expense_values, expense_colors = [], [], []
+    for cid, amt in expense_totals.items():
+        if amt <= 0:
+            continue
+        info = cat_map.get(cid, {'name': str(cid), 'color': '#888'})
+        expense_labels.append(info['name'])
+        expense_values.append(amt)
+        expense_colors.append(info.get('color', '#888'))
+
     return render_template('index.html', 
                          transactions=data['transactions'],
                          balance=balance,
-                         categories=data.get('categories', []),
+                         categories=categories,
                          wallets=wallets,
                          budgets=data.get('budgets', []),
                          budgets_status=budgets_status,
-                         recurring=data.get('recurring', []))
+                         recurring=data.get('recurring', []),
+                         income_labels=income_labels,
+                         income_values=income_values,
+                         income_colors=income_colors,
+                         expense_labels=expense_labels,
+                         expense_values=expense_values,
+                         expense_colors=expense_colors,
+                         income_categories=income_categories,
+                         expense_categories=expense_categories)
 
+    # Prepare category breakdowns for charts
+    categories = data.get('categories', [])
+    # map category id -> info
+    cat_map = {c['id']: {'name': c.get('name', str(c.get('id'))), 'color': c.get('color', '#888')} for c in categories}
+    cat_map[0] = {'name': 'Umum', 'color': '#cccccc'}
+
+    income_totals = {}
+    expense_totals = {}
+    for t in data.get('transactions', []):
+        cid = t.get('category_id', 0) or 0
+        try:
+            amt = float(t.get('amount', 0))
+        except Exception:
+            amt = 0
+        if t.get('type') == 'income':
+            income_totals[cid] = income_totals.get(cid, 0) + amt
+        else:
+            expense_totals[cid] = expense_totals.get(cid, 0) + amt
+
+    # build lists for charting (only categories with non-zero amounts)
+    income_labels, income_values, income_colors = [], [], []
+    for cid, amt in income_totals.items():
+        if amt <= 0:
+            continue
+        info = cat_map.get(cid, {'name': str(cid), 'color': '#888'})
+        income_labels.append(info['name'])
+        income_values.append(amt)
+        income_colors.append(info.get('color', '#888'))
+
+    expense_labels, expense_values, expense_colors = [], [], []
+    for cid, amt in expense_totals.items():
+        if amt <= 0:
+            continue
+        info = cat_map.get(cid, {'name': str(cid), 'color': '#888'})
+        expense_labels.append(info['name'])
+        expense_values.append(amt)
+        expense_colors.append(info.get('color', '#888'))
+
+    return render_template('index.html', 
+                         transactions=data['transactions'],
+                         balance=balance,
+                         categories=categories,
+                         wallets=wallets,
+                         budgets=data.get('budgets', []),
+                         budgets_status=budgets_status,
+                         recurring=data.get('recurring', []),
+                         income_labels=income_labels,
+                         income_values=income_values,
+                         income_colors=income_colors,
+                         expense_labels=expense_labels,
+                         expense_values=expense_values,
+                         expense_colors=expense_colors,
+                         income_categories=income_categories,
+                         expense_categories=expense_categories)
 @app.route('/add_budget', methods=['POST'])
 def add_budget():
     data = load_data()
@@ -205,20 +333,36 @@ def add_budget():
     except ValueError:
         month = datetime.now().month
         year = datetime.now().year
+    # ensure budgets have their own id tracker (next_budget_id) to avoid colliding with category ids
+    if 'next_budget_id' not in data:
+        # compute a safe start based on existing budgets
+        existing = [b.get('id', 0) for b in data.get('budgets', [])]
+        data['next_budget_id'] = (max(existing) + 1) if existing else 1
+
     new_budget = {
-        'id': data.get('next_category_id', 1000),
+        'id': data.get('next_budget_id'),
         'category_id': category_id,
         'limit': limit,
         'month': month,
         'year': year
     }
     data.setdefault('budgets', []).append(new_budget)
-    # increment a standalone id tracker for budgets
-    data['next_category_id'] = data.get('next_category_id', 1000) + 1
+    # increment the budget id tracker
+    data['next_budget_id'] = data.get('next_budget_id', 1) + 1
     save_data(data)
     return redirect(url_for('index'))
 
-
+@app.route('/delete_budget', methods=['POST'])
+def delete_budget():
+    data = load_data()
+    try:
+        budget_id = int(request.form.get('budget_id', 0))
+    except ValueError:
+        budget_id = 0
+    if budget_id:
+        data['budgets'] = [b for b in data.get('budgets', []) if b.get('id') != budget_id]
+        save_data(data)
+    return redirect(url_for('index'))
 @app.route('/add_recurring', methods=['POST'])
 def add_recurring():
     data = load_data()
@@ -372,23 +516,21 @@ def export_csv():
 @app.route('/delete/<int:transaction_id>')
 def delete_transaction(transaction_id):
     data = load_data()
-    
     # Hapus transaksi berdasarkan ID
-    data['transactions'] = [t for t in data['transactions'] if t['id'] != transaction_id]
-    data['balance'] = recalculate_balance(data['transactions'])
-    
+    data['transactions'] = [t for t in data.get('transactions', []) if t.get('id') != transaction_id]
+    # Recalculate balance using full data structure
+    data['balance'] = recalculate_balance(data)
     save_data(data)
     return redirect(url_for('index'))
 
 @app.route('/clear-all')
 def clear_all():
-    # Hapus semua transaksi
-    default_data = {
-        "transactions": [],
-        "balance": 0,
-        "next_id": 1
-    }
-    save_data(default_data)
+    # Hapus semua transaksi but preserve categories, wallets, and other config
+    data = load_data()
+    data['transactions'] = []
+    data['next_id'] = 1
+    # Optionally reset recurring/budgets if you want; keep as-is for now
+    save_data(data)
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
