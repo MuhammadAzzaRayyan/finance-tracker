@@ -39,4 +39,4 @@ fi
 "$VENV_PY" -m pip install --upgrade pip
 "$VENV_PY" -m pip install -r requirements.txt
 exec "$VENV_PY" app.py
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 

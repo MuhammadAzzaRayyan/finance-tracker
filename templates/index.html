@@ -11,7 +11,7 @@
     <!-- Custom CSS -->
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ static_version }}">
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
 </head>
 <body>
     <div class="app-navbar">
@@ -36,14 +36,14 @@
 
 
     <div class="container-fluid" style="margin-top:12px">
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
         <div class="row">
             <div class="col-lg-2 sidebar">
                 <nav class="nav flex-column">
                     <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Beranda</a>
 
                     <a class="nav-link" href="#"><i class="fas fa-wallet me-2"></i>Metode Transaksi</a>
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                     <a class="nav-link" href="#"><i class="fas fa-chart-pie me-2"></i>Laporan</a>
                     <a class="nav-link" href="#"><i class="fas fa-cog me-2"></i>Pengaturan</a>
                 </nav>
@@ -77,7 +77,7 @@
                             </div>
 
                             <div class="card-body">
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                 <form action="/add" method="POST">
                                     <div class="mb-3">
                                         <label class="form-label">Deskripsi</label>
@@ -85,7 +85,7 @@
                                     </div>
                                     <div class="mb-3">
 
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                         <label class="form-label">Tipe</label>
                                         <select name="type" class="form-select">
                                             <option value="income">💰 Pemasukan</option>
@@ -111,7 +111,7 @@
                                             {% endfor %}
                                         </select>
                                     </div>
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                     <button type="submit" class="btn btn-primary w-100">
                                         <i class="fas fa-save"></i> Simpan Transaksi
                                     </button>
@@ -126,7 +126,7 @@
                                 <i class="fas fa-wallet"></i> Metode Transaksi & Transfer
                             </div>
                             <div class="card-body panel-scroll wallets-row">
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                 <ul class="list-group mb-3">
                                     {% for w in wallets %}
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -144,7 +144,7 @@
                                 </form>
 
                                 <form action="/transfer" method="POST" class="row g-2">
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                     <div class="col-4">
                                         <select name="from_wallet" class="form-select">
                                             {% for w in wallets %}
@@ -286,7 +286,7 @@
                     </div>
 
                     <!-- Right column: charts and transactions -->
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-header bg-info text-white">
@@ -310,7 +310,7 @@
                                     </div>
                                 </div>
 
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                 {% if transactions %}
                                     <div class="table-responsive">
                                         <table class="table table-hover">
@@ -323,7 +323,7 @@
                                                     <th class="col-amount">Jumlah</th>
                                                     <th class="col-type">Tipe</th>
                                                     <th class="col-actions">Aksi</th>
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -333,7 +333,7 @@
                                                     <td>{{ transaction.date[:16] if transaction.date else "-" }}</td>
 
                                                     <td class="description">{{ transaction.description }}</td>
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
                                                     <td>Rp {{ "{:,.0f}".format(transaction.amount) }}</td>
                                                     <td>
                                                         {% if transaction.type == 'income' %}
@@ -469,6 +469,6 @@
         }
         document.addEventListener('DOMContentLoaded', renderCharts);
     </script>
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
 </body>
 </html>

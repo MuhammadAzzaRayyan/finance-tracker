@@ -25,7 +25,7 @@ body{
     color: var(--accent);
     line-height: 1.4;
     font-size: 16px;
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
 }
 .app-navbar{
     background:#ffffff;
@@ -38,7 +38,7 @@ body{
 }
 .app-navbar .brand{
     
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
 }
 .app-navbar .brand{
     display:flex;align-items:center;gap:.6rem;font-weight:700;color:var(--accent);
@@ -71,7 +71,7 @@ body{
     padding-top:12px;
     min-height: calc(100vh - 56px);
 }
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
 .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);}
 .balance-card{padding:1.2rem}
 .balance-amount{font-size:2rem;font-weight:700;color:#111}
@@ -92,7 +92,7 @@ h6 { font-size: 0.95rem; }
 /* Reduce excessive spacing on small elements */
 .app-navbar .form-control { height:40px }
 .app-navbar .btn { height:40px }
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
 .progress{height:10px;border-radius:999px}
 .recurring-list .list-group-item{border-radius:8px}
 @media (max-width: 991px){
@@ -278,4 +278,4 @@ button, .btn, a.btn {
 .budget-panel .badge { font-size: .72rem; padding: .2rem .35rem; }
 
 
- 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 
