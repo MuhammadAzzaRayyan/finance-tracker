@@ -1,10 +1,12 @@
 /* Modern YouTube-like UI styles */
 :root{
-    --primary:#ff0000;
-    --bg:#f7f7f8;
-    --card:#ffffff;
-    --muted:#6c757d;
-    --accent:#1f2937;
+    /* Elegant palette: soft indigo primary, warm paper background */
+    --primary: #6D28D9; /* indigo-700 */
+    --primary-600: #7C3AED;
+    --bg: linear-gradient(135deg, #F3F4FF 0%, #FAF5FF 100%);
+    --card: #FFFFFF;
+    --muted: #6B7280;
+    --accent: #0F172A;
 }
 
 /* Normalize box sizing and base font */
@@ -18,7 +20,7 @@ html {
 
 /* Base typography */
 body{
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--bg);
     min-height: 100vh;
     margin: 0;
     font-family: Inter, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -28,7 +30,7 @@ body{
  
 }
 .app-navbar{
-    background:#ffffff;
+    background: rgba(255,255,255,0.9);
     border-bottom:1px solid #e6e6e6;
     position:sticky;
     top:0;
@@ -44,7 +46,7 @@ body{
     display:flex;align-items:center;gap:.6rem;font-weight:700;color:var(--accent);
 }
 .app-navbar .brand .logo{
-    width:36px;height:24px;background:var(--primary);border-radius:4px;display:inline-block;
+    width:36px;height:24px;background:var(--primary);border-radius:8px;display:inline-block;box-shadow: 0 4px 12px rgba(109,40,217,0.14);
 }
 .sidebar{
 
