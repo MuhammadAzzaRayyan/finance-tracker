@@ -128,11 +128,14 @@
                             <div class="card-body panel-scroll wallets-row">
  
                                 <ul class="list-group mb-3">
+                                    {% set shown_wallets = ['Tunai', 'Bank A', 'E-Wallet'] %}
                                     {% for w in wallets %}
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>{{ w.name }}</div>
-                                            <div>Rp {{ "{:,.0f}".format(w.balance) }}</div>
-                                        </li>
+                                        {% if w.name in shown_wallets %}
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>{{ w.name }}</div>
+                                                <div>Rp {{ "{:,.0f}".format(w.balance) }}</div>
+                                            </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
 
