@@ -1,11 +1,4 @@
 {
-<<<<<<< HEAD
-    "transactions": [],
-    "categories": [
-        {
-            "id": 1,
-            "name": "Makan",
-=======
     "transactions": [
         {
             "id": 6,
@@ -13,90 +6,156 @@
             "amount": 12300000.0,
             "type": "income",
             "date": "2026-06-15 15:36:42",
-            {
-                "transactions": [
-                    {
-                        "id": 6,
-                        "description": "tf papah",
-                        "amount": 12300000.0,
-                        "type": "income",
-                        "date": "2026-06-15 15:36:42",
-                        "wallet_id": 1,
-                        "category_id": 0,
-                        "subcategory": ""
-                    },
-                    {
-                        "id": 7,
-                        "description": "makan burjo",
-                        "amount": 12000.0,
-                        "type": "expense",
-                        "date": "2026-06-15 15:41:31",
-                        "wallet_id": 1,
-                        "category_id": 1,
-                        "subcategory": ""
-                    },
-                    {
-                        "id": 8,
-                        "description": "gojek ke kampus",
-                        "amount": 7000.0,
-                        "type": "expense",
-                        "date": "2026-06-15 15:41:51",
-                        "wallet_id": 1,
-                        "category_id": 2,
-                        "subcategory": ""
-                    },
-                    {
-                        "id": 9,
-                        "description": "pulpen",
-                        "amount": 15000.0,
-                        "type": "expense",
-                        "date": "2026-06-15 15:42:12",
-                        "wallet_id": 1,
-                        "category_id": 0,
-                        "subcategory": ""
-                    }
-                ],
-                "categories": [
-                    {
-                        "id": 1,
-                        "name": "Makan dan Minum",
-                        "color": "#ff7675",
-                        "icon": "utensils",
-                        "subcategories": [
-                            {"id": 11, "name": "Warung"},
-                            {"id": 12, "name": "Restoran"}
-                        ]
-                    },
-                    {
-                        "id": 2,
-                        "name": "Transportasi",
-                        "color": "#74b9ff",
-                        "icon": "car",
-                        "subcategories": [
-                            {"id": 21, "name": "Bensin"},
-                            {"id": 22, "name": "Parkir"}
-                        ]
-                    },
-                    {"id": 3, "name": "Uang Bulanan", "color": "#55efc4", "icon": "money-bill-wave", "subcategories": []},
-                    {"id": 4, "name": "Uang Beasiswa", "color": "#74b9ff", "icon": "graduation-cap", "subcategories": []},
-                    {"id": 5, "name": "Uang Kerja", "color": "#ffeaa7", "icon": "briefcase", "subcategories": []},
-                    {"id": 6, "name": "Gaya Hidup", "color": "#a29bfe", "icon": "heart", "subcategories": []}
-                ],
-                "wallets": [
-                    {"id": 1, "name": "Tunai", "initial_balance": 0},
-                    {"id": 2, "name": "Bank A", "initial_balance": 0},
-                    {"id": 3, "name": "E-Wallet", "initial_balance": 50.0}
-                ],
-                "recurring": [
-                    {"id": 1, "description": "Rec Test", "amount": 5.0, "type": "expense", "wallet_id": 1, "category_id": 1, "subcategory": "", "frequency": "daily", "last_run": "2026-06-15 14:59:52"}
-                ],
-                "budgets": [
-                    {"id": 3, "category_id": 1, "limit": 1200000.0, "month": 6, "year": 2026}
-                ],
-                "next_id": 10,
-                "next_category_id": 7,
-                "next_subcategory_id": 101,
-                "next_wallet_id": 4,
-                "next_recurring_id": 2,
-                "balance": 12266050.0
-            }
+            "wallet_id": 1,
+            "category_id": 0,
+            "subcategory": ""
+        },
+        {
+            "id": 7,
+            "description": "makan burjo",
+            "amount": 12000.0,
+            "type": "expense",
+            "date": "2026-06-15 15:41:31",
+            "wallet_id": 1,
+            "category_id": 1,
+            "subcategory": ""
+        },
+        {
+            "id": 8,
+            "description": "gojek ke kampus",
+            "amount": 7000.0,
+            "type": "expense",
+            "date": "2026-06-15 15:41:51",
+            "wallet_id": 1,
+            "category_id": 2,
+            "subcategory": ""
+        },
+        {
+            "id": 9,
+            "description": "pulpen",
+            "amount": 15000.0,
+            "type": "expense",
+            "date": "2026-06-15 15:42:12",
+            "wallet_id": 1,
+            "category_id": 0,
+            "subcategory": ""
+        },
+        {
+            "id": 10,
+            "description": "Rec Test (recurring)",
+            "amount": 5.0,
+            "type": "expense",
+            "date": "2026-06-16 18:41:41",
+            "wallet_id": 1,
+            "category_id": 1,
+            "subcategory": ""
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "name": "Makan dan Minum",
+            "color": "#ff7675",
+            "icon": "utensils",
+            "subcategories": [
+                {
+                    "id": 11,
+                    "name": "Warung"
+                },
+                {
+                    "id": 12,
+                    "name": "Restoran"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Transportasi",
+            "color": "#74b9ff",
+            "icon": "car",
+            "subcategories": [
+                {
+                    "id": 21,
+                    "name": "Bensin"
+                },
+                {
+                    "id": 22,
+                    "name": "Parkir"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Uang Bulanan",
+            "color": "#55efc4",
+            "icon": "money-bill-wave",
+            "subcategories": []
+        },
+        {
+            "id": 4,
+            "name": "Uang Beasiswa",
+            "color": "#74b9ff",
+            "icon": "graduation-cap",
+            "subcategories": []
+        },
+        {
+            "id": 5,
+            "name": "Uang Kerja",
+            "color": "#ffeaa7",
+            "icon": "briefcase",
+            "subcategories": []
+        },
+        {
+            "id": 6,
+            "name": "Gaya Hidup",
+            "color": "#a29bfe",
+            "icon": "heart",
+            "subcategories": []
+        }
+    ],
+    "wallets": [
+        {
+            "id": 1,
+            "name": "Tunai",
+            "initial_balance": 0
+        },
+        {
+            "id": 2,
+            "name": "Bank A",
+            "initial_balance": 0
+        },
+        {
+            "id": 3,
+            "name": "E-Wallet",
+            "initial_balance": 50.0
+        }
+    ],
+    "recurring": [
+        {
+            "id": 1,
+            "description": "Rec Test",
+            "amount": 5.0,
+            "type": "expense",
+            "wallet_id": 1,
+            "category_id": 1,
+            "subcategory": "",
+            "frequency": "daily",
+            "last_run": "2026-06-16 18:41:41"
+        }
+    ],
+    "budgets": [
+        {
+            "id": 3,
+            "category_id": 1,
+            "limit": 1200000.0,
+            "month": 6,
+            "year": 2026
+        }
+    ],
+    "next_id": 11,
+    "next_category_id": 7,
+    "next_subcategory_id": 101,
+    "next_wallet_id": 4,
+    "next_recurring_id": 2,
+    "balance": 12266050.0
+}

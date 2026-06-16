@@ -9,28 +9,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Custom CSS -->
-<<<<<<< HEAD
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-        }
-    </style>
-=======
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ static_version }}">
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
 </head>
 <body>
     <div class="app-navbar">
@@ -53,20 +34,16 @@
         </div>
     </div>
 
-<<<<<<< HEAD
-    <div class="container-fluid">
-=======
+
     <div class="container-fluid" style="margin-top:12px">
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
         <div class="row">
             <div class="col-lg-2 sidebar">
                 <nav class="nav flex-column">
                     <a class="nav-link active" href="#"><i class="fas fa-home me-2"></i>Beranda</a>
-<<<<<<< HEAD
-                    <a class="nav-link" href="#"><i class="fas fa-wallet me-2"></i>Dompet</a>
-=======
+
                     <a class="nav-link" href="#"><i class="fas fa-wallet me-2"></i>Metode Transaksi</a>
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                     <a class="nav-link" href="#"><i class="fas fa-chart-pie me-2"></i>Laporan</a>
                     <a class="nav-link" href="#"><i class="fas fa-cog me-2"></i>Pengaturan</a>
                 </nav>
@@ -98,49 +75,24 @@
                             <div class="card-header bg-primary text-white">
                                 <i class="fas fa-plus-circle"></i> Tambah Transaksi
                             </div>
-<<<<<<< HEAD
-                            <div class="card-body d-flex flex-column">
-=======
+
                             <div class="card-body">
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                 <form action="/add" method="POST">
                                     <div class="mb-3">
                                         <label class="form-label">Deskripsi</label>
                                         <input type="text" name="description" class="form-control" placeholder="Contoh: Gaji, Makan, dll" required>
                                     </div>
                                     <div class="mb-3">
-<<<<<<< HEAD
-                                        <label class="form-label">Jumlah (Rp)</label>
-                                        <input type="number" name="amount" class="form-control" placeholder="0" step="0.01" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Dompet</label>
-                                        <select name="wallet_id" class="form-select">
-                                            {% for w in wallets %}
-                                                <option value="{{ w.id }}">{{ w.name }} — Rp {{ "{:,.0f}".format(w.balance) }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Kategori</label>
-                                        <select name="category_id" class="form-select">
-                                            <option value="0">Umum</option>
-                                            {% for c in categories %}
-                                                <option value="{{ c.id }}">{{ c.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-=======
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                         <label class="form-label">Tipe</label>
                                         <select name="type" class="form-select">
                                             <option value="income">💰 Pemasukan</option>
                                             <option value="expense">💸 Pengeluaran</option>
                                         </select>
                                     </div>
-<<<<<<< HEAD
-=======
+
                                     <div class="mb-3">
                                         <label class="form-label">Kategori</label>
                                         <select name="category_id" class="form-select category-select">
@@ -159,7 +111,7 @@
                                             {% endfor %}
                                         </select>
                                     </div>
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                     <button type="submit" class="btn btn-primary w-100">
                                         <i class="fas fa-save"></i> Simpan Transaksi
                                     </button>
@@ -169,17 +121,12 @@
 
                         <!-- Wallets -->
                         <div class="card mt-3">
-<<<<<<< HEAD
-                            <div class="card-header bg-secondary text-white">
-                                <i class="fas fa-wallet"></i> Dompet & Transfer
-                            </div>
-                            <div class="card-body d-flex flex-column">
-=======
+
                                 <div class="card-header bg-secondary text-white">
                                 <i class="fas fa-wallet"></i> Metode Transaksi & Transfer
                             </div>
                             <div class="card-body panel-scroll wallets-row">
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                 <ul class="list-group mb-3">
                                     {% for w in wallets %}
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -188,15 +135,7 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
-<<<<<<< HEAD
 
-                                <form id="add_wallet_form" action="/add_wallet" method="POST" class="row g-2 mt-auto">
-                                    <div class="col-6"><input name="name" placeholder="Nama dompet" class="form-control"></div>
-                                    <div class="col-4"><input name="initial" placeholder="Saldo awal" class="form-control" type="number" step="0.01"></div>
-                                </form>
-
-                                <form id="transfer_form" action="/transfer" method="POST" class="row g-2">
-=======
                                 <form action="/add_wallet" method="POST" class="row g-2 mb-2 wallet-form">
                                     <div class="col-6"><input name="name" placeholder="Nama dompet" class="form-control"></div>
                                     <div class="col-4"><input name="initial_display" data-raw-name="initial" placeholder="Rp 0" class="form-control currency"></div>
@@ -205,7 +144,7 @@
                                 </form>
 
                                 <form action="/transfer" method="POST" class="row g-2">
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                     <div class="col-4">
                                         <select name="from_wallet" class="form-select">
                                             {% for w in wallets %}
@@ -220,115 +159,7 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-<<<<<<< HEAD
-                                    <div class="col-3"><input name="amount" class="form-control" placeholder="Jumlah" type="number" step="0.01"></div>
-                                </form>
 
-                                <div class="card-footer d-flex gap-2 justify-content-end pt-3 px-0 border-0 bg-transparent">
-                                    <button form="add_wallet_form" type="submit" class="btn btn-success">Tambah</button>
-                                    <button form="transfer_form" type="submit" class="btn btn-primary">OK</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Budgets -->
-                        <div class="card mt-3">
-                            <div class="card-header bg-warning text-dark">
-                                <i class="fas fa-wallet"></i> Anggaran (Budget)
-                            </div>
-                            <div class="card-body d-flex flex-column">
-                                {% if budgets_status %}
-                                    <ul class="list-group mb-3">
-                                        {% for b in budgets_status %}
-                                            <li class="list-group-item">
-                                                <div class="d-flex justify-content-between">
-                                                    <div>Kategori ID: {{ b.category_id }} — Bulan: {{ b.month }}/{{ b.year }}</div>
-                                                    <div>Rp {{ "{:,.0f}".format(b.spent) }} / Rp {{ "{:,.0f}".format(b.limit) }}</div>
-                                                </div>
-                                                <div class="progress mt-2">
-                                                    <div class="progress-bar {% if b.status=='over' %}bg-danger{% elif b.status=='near' %}bg-warning{% else %}bg-success{% endif %}" role="progressbar" style="width: {{ b.percent|round(0) if b.percent<=100 else 100 }}%"></div>
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <div class="text-muted">Belum ada anggaran.</div>
-                                {% endif %}
-
-                                <form id="add_budget_form" action="/add_budget" method="POST" class="row g-2 mt-auto">
-                                    <div class="col-6">
-                                        <select name="category_id" class="form-select">
-                                            {% for c in categories %}
-                                                <option value="{{ c.id }}">{{ c.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-3"><input name="limit" class="form-control" placeholder="Limit (Rp)" type="number" step="0.01"></div>
-                                    <div class="col-2"><input name="month" class="form-control" placeholder="Bln" type="number" min="1" max="12"></div>
-                                </form>
-                                <div class="card-footer d-flex gap-2 justify-content-end pt-3 px-0 border-0 bg-transparent">
-                                    <button form="add_budget_form" type="submit" class="btn btn-dark">Tambah</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Recurring -->
-                        <div class="card mt-3">
-                            <div class="card-header bg-light">
-                                <i class="fas fa-redo"></i> Transaksi Berulang
-                            </div>
-                            <div class="card-body d-flex flex-column">
-                                {% if recurring %}
-                                    <ul class="list-group mb-3">
-                                        {% for r in recurring %}
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <div>{{ r.description }} — Rp {{ "{:,.0f}".format(r.amount) }} ({{ r.frequency }})</div>
-                                                <div class="small text-muted">Last: {{ r.last_run if r.last_run else '-' }}</div>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <div class="text-muted mb-3">Belum ada transaksi berulang.</div>
-                                {% endif %}
-
-                                <form id="add_recurring_form" action="/add_recurring" method="POST" class="row g-2 mt-auto">
-                                    <div class="col-5"><input name="description" class="form-control" placeholder="Deskripsi"></div>
-                                    <div class="col-2"><input name="amount" class="form-control" placeholder="Jumlah" type="number" step="0.01"></div>
-                                    <div class="col-2">
-                                        <select name="type" class="form-select">
-                                            <option value="expense">Pengeluaran</option>
-                                            <option value="income">Pemasukan</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-2">
-                                        <select name="frequency" class="form-select">
-                                            <option value="daily">Harian</option>
-                                            <option value="weekly">Mingguan</option>
-                                            <option value="monthly" selected>Bulanan</option>
-                                        </select>
-                                    </div>
-                                </form>
-                                <div class="card-footer d-flex gap-2 justify-content-end pt-3 px-0 border-0 bg-transparent">
-                                    <button form="add_recurring_form" type="submit" class="btn btn-primary">OK</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Danger Zone -->
-                        <div class="card mt-3">
-                            <div class="card-header bg-danger text-white">
-                                <i class="fas fa-exclamation-triangle"></i> Pengaturan
-                            </div>
-                            <div class="card-body">
-                                <a href="/clear-all" class="btn btn-danger w-100" onclick="return confirm('Yakin ingin menghapus SEMUA transaksi?')">
-                                    <i class="fas fa-trash-alt"></i> Hapus Semua Transaksi
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Transaction List -->
-=======
                                     <div class="col-3"><input name="transfer_amount_display" data-raw-name="amount" class="form-control currency" placeholder="Rp 0" type="text"></div>
                                     <input type="hidden" name="amount" class="currency-raw">
                                     <div class="col-1"><button class="btn btn-primary w-100">OK</button></div>
@@ -455,15 +286,14 @@
                     </div>
 
                     <!-- Right column: charts and transactions -->
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-header bg-info text-white">
                                 <i class="fas fa-list"></i> Daftar Transaksi
                             </div>
                             <div class="card-body">
-<<<<<<< HEAD
-=======
+
                                 <!-- Category charts -->
                                 <div class="row mb-3">
                                     <div class="col-md-6">
@@ -480,27 +310,20 @@
                                     </div>
                                 </div>
 
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                 {% if transactions %}
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
                                                 <tr>
-<<<<<<< HEAD
-                                                    <th>#</th>
-                                                    <th>Tanggal</th>
-                                                    <th>Deskripsi</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Tipe</th>
-                                                    <th>Aksi</th>
-=======
+
                                                     <th class="col-index">#</th>
                                                     <th class="col-date">Tanggal</th>
                                                     <th class="col-desc">Deskripsi</th>
                                                     <th class="col-amount">Jumlah</th>
                                                     <th class="col-type">Tipe</th>
                                                     <th class="col-actions">Aksi</th>
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -508,11 +331,9 @@
                                                 <tr>
                                                     <td>{{ loop.index }}</td>
                                                     <td>{{ transaction.date[:16] if transaction.date else "-" }}</td>
-<<<<<<< HEAD
-                                                    <td>{{ transaction.description }}</td>
-=======
+
                                                     <td class="description">{{ transaction.description }}</td>
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
                                                     <td>Rp {{ "{:,.0f}".format(transaction.amount) }}</td>
                                                     <td>
                                                         {% if transaction.type == 'income' %}
@@ -541,18 +362,7 @@
                         </div>
                     </div>
                 </div>
-<<<<<<< HEAD
 
-                <footer>
-                    <p>&copy; 2024 Personal Finance Manager | <i class="fas fa-chart-line"></i> Atur keuanganmu dengan bijak</p>
-                </footer>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-=======
             </div>
         </div>
 
@@ -659,6 +469,6 @@
         }
         document.addEventListener('DOMContentLoaded', renderCharts);
     </script>
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
 </body>
 </html>

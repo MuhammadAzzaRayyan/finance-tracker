@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")"
-<<<<<<< HEAD
-if [ ! -d .venv ]; then
-  python3 -m venv .venv || python -m venv .venv
-fi
-. .venv/bin/activate
-pip install -r requirements.txt
-python app.py
-=======
+
 PY=python3
 if ! command -v "$PY" >/dev/null 2>&1; then
   PY=python
@@ -46,4 +39,4 @@ fi
 "$VENV_PY" -m pip install --upgrade pip
 "$VENV_PY" -m pip install -r requirements.txt
 exec "$VENV_PY" app.py
->>>>>>> 1c0dce200b3a7691e168cbf9e38f908992a9caf8
+ 1c0dce200b3a7691e168cbf9e38f908992a9caf8
