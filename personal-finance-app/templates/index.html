@@ -189,10 +189,10 @@
                             {% for cat, s in budget_status.items() %}
                             <tr>
                                 <td>{{ cat }}</td>
-                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.budget).replace(',', '.') if s.budget else 'Rp. 0' }}</td>
-                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.spent).replace(',', '.') if s.spent else 'Rp. 0' }}</td>
-                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.remaining).replace(',', '.') if s.remaining else 'Rp. 0' }}</td>
-                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.projected_end).replace(',', '.') }}</td>
+                                <td>{{ 'Rp. ' + "{:,.0f}".format(s.budget).replace(',', '.') if s.budget else 'Rp. 0' }}</td>
+                                <td>{{ 'Rp. ' + "{:,.0f}".format(s.spent).replace(',', '.') if s.spent else 'Rp. 0' }}</td>
+                                <td>{{ 'Rp. ' + "{:,.0f}".format(s.remaining).replace(',', '.') if s.remaining else 'Rp. 0' }}</td>
+                                <td>{{ 'Rp. ' + "{:,.0f}".format(s.projected_end).replace(',', '.') }}</td>
                                 <td>
                                     {% if s.will_exceed %}
                                     <span class="badge bg-danger">Berisiko</span>
