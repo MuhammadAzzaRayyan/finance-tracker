@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import json
 import os
 from datetime import datetime
+import calendar
+import math
 import re
 from werkzeug.utils import secure_filename
 
@@ -100,14 +102,29 @@ def index():
                 monthly_totals[cat] = 0
             monthly_totals[cat] += t.get('amount', 0)
 
-    # Prepare budget status
+    # Prepare budget status, remaining and projection
     budgets = data.get('budgets', {})
     budget_status = {}
     alerts = []
-    for cat, budget in budgets.items():
+    days_in_month = calendar.monthrange(now.year, now.month)[1]
+    days_passed = now.day
+    for cat in set(list(budgets.keys()) + list(monthly_totals.keys())):
+        budget = budgets.get(cat, 0)
         spent = monthly_totals.get(cat, 0)
+        remaining = budget - spent
         pct = (spent / budget * 100) if budget and budget > 0 else 0
-        budget_status[cat] = { 'budget': budget, 'spent': spent, 'pct': pct }
+        avg_daily = (spent / days_passed) if days_passed > 0 else 0
+        projected_end = avg_daily * days_in_month
+        will_exceed = True if budget and projected_end > budget else False
+        budget_status[cat] = {
+            'budget': budget,
+            'spent': spent,
+            'remaining': remaining,
+            'pct': pct,
+            'avg_daily': avg_daily,
+            'projected_end': projected_end,
+            'will_exceed': will_exceed
+        }
         if budget and pct >= 90:
             alerts.append({ 'category': cat, 'pct': pct })
     return render_template('index.html', 
@@ -174,6 +191,35 @@ def set_budgets():
             budgets[c] = float(val) if val not in (None, '') else 0
         except Exception:
             budgets[c] = 0
+    data['budgets'] = budgets
+    save_data(data)
+    return redirect(url_for('index'))
+
+
+@app.route('/set_total_budget', methods=['POST'])
+def set_total_budget():
+    data = load_data()
+    total = request.form.get('total_budget')
+    mode = request.form.get('mode') or 'scale'
+    try:
+        total_val = float(total)
+    except Exception:
+        total_val = 0
+
+    budgets = data.get('budgets', {})
+    # if existing budgets sum to >0 and mode=scale, scale them to total
+    s = sum(budgets.values())
+    if total_val > 0:
+        if s > 0 and mode == 'scale':
+            factor = total_val / s
+            for k in budgets:
+                budgets[k] = budgets.get(k, 0) * factor
+        else:
+            # distribute evenly
+            per = total_val / max(1, len(CATEGORIES))
+            for c in CATEGORIES:
+                budgets[c] = per
+
     data['budgets'] = budgets
     save_data(data)
     return redirect(url_for('index'))

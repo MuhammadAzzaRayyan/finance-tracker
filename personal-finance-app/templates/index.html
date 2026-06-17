@@ -148,6 +148,65 @@
                 {% if alerts %}
                 <div class="alert alert-warning mt-3">Anggaran hampir habis: {% for a in alerts %}{{ a.category }} ({{ "{:.0f}"|format(a.pct) }}%){% if not loop.last %}, {% endif %}{% endfor %}</div>
                 {% endif %}
+
+                <hr>
+                <h6>Budget Planner Bulanan</h6>
+                <form action="/set_total_budget" method="POST" class="row gx-2">
+                    <div class="col-auto">
+                        <input type="number" name="total_budget" min="0" step="1000" class="form-control" placeholder="Total anggaran bulan ini">
+                    </div>
+                    <div class="col-auto">
+                        <select name="mode" class="form-control">
+                            <option value="scale">Skala berdasarkan nilai kategori saat ini</option>
+                            <option value="even">Distribusi rata-rata ke semua kategori</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-success">Terapkan Total</button>
+                    </div>
+                </form>
+                <small class="text-muted">Atau atur anggaran per kategori di atas, lalu klik Apply Total dengan mode "Skala".</small>
+            </div>
+        </div>
+
+        <!-- Sisa Anggaran & Proyeksi -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">🎯 Sisa Anggaran & Proyeksi Akhir Bulan</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Anggaran</th>
+                                <th>Terpakai</th>
+                                <th>Sisa</th>
+                                <th>Proyeksi Akhir Bulan</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cat, s in budget_status.items() %}
+                            <tr>
+                                <td>{{ cat }}</td>
+                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.budget).replace(',', '.') if s.budget else 'Rp. 0' }}</td>
+                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.spent).replace(',', '.') if s.spent else 'Rp. 0' }}</td>
+                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.remaining).replace(',', '.') if s.remaining else 'Rp. 0' }}</td>
+                                <td>{{ 'Rp. ' + "{:, .0f}".format(s.projected_end).replace(',', '.') }}</td>
+                                <td>
+                                    {% if s.will_exceed %}
+                                    <span class="badge bg-danger">Berisiko</span>
+                                    {% elif s.pct >= 75 %}
+                                    <span class="badge bg-warning text-dark">Waspada</span>
+                                    {% else %}
+                                    <span class="badge bg-success">Aman</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
