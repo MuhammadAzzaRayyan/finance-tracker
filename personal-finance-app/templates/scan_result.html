@@ -38,12 +38,9 @@
                 <div class="mb-3">
                     <label class="form-label">Kategori</label>
                     <select name="category" class="form-control">
-                        <option>Belanja</option>
-                        <option>Makan & Minum</option>
-                        <option>Transportasi</option>
-                        <option>Kesehatan</option>
-                        <option>Hiburan</option>
-                        <option>Lain-lain</option>
+                        {% for cat in categories %}
+                        <option>{{ cat }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
