@@ -95,7 +95,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">📝 Tambah Transaksi</h5>
-                <form action="/add_transaction" method="POST">
+                <form action="/add_transaction" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-5 mb-2">
                             <input type="text" name="description" class="form-control" placeholder="Deskripsi" required>
@@ -115,6 +115,10 @@
                                 <option>{{ cat }}</option>
                                 {% endfor %}
                             </select>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label">Lampirkan Foto Struk (opsional)</label>
+                            <input type="file" name="receipt" accept="image/*" class="form-control">
                         </div>
                         <div class="col-md-12 mt-2">
                             <button type="submit" class="btn btn-add">Tambah</button>
@@ -168,6 +172,13 @@
                                 <strong>{{ transaction.description }}</strong>
                                 <br>
                                 <small class="timestamp">{{ transaction.date }}</small>
+                                {% if transaction.receipt %}
+                                <div class="mt-2">
+                                    <a href="/uploads/{{ transaction.receipt }}" target="_blank">
+                                        <img src="/uploads/{{ transaction.receipt }}" alt="struk" style="max-width:100px;border-radius:6px;">
+                                    </a>
+                                </div>
+                                {% endif %}
                             </div>
                             <div class="col-md-4 text-end">
                                 {% if transaction.type == 'income' %}

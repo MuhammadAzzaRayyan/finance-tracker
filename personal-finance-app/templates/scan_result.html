@@ -18,6 +18,15 @@
                 <input type="text" id="merchant" class="form-control" value="{{ merchant }}">
             </div>
 
+            {% if saved_filename %}
+            <div class="mb-3">
+                <label class="form-label">Preview Struk</label>
+                <div>
+                    <a href="/uploads/{{ saved_filename }}" target="_blank"><img src="/uploads/{{ saved_filename }}" style="max-width:200px;border-radius:6px"></a>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="mb-3">
                 <label class="form-label">Tanggal (opsional)</label>
                 <input type="text" id="date" class="form-control" value="{{ date }}">
@@ -34,6 +43,7 @@
                 <input type="hidden" name="type" value="expense">
                 <input type="hidden" name="date" id="fdate">
                 <input type="hidden" name="category" id="fcategory" value="Belanja">
+                <input type="hidden" name="receipt_filename" id="freceipt">
 
                 <div class="mb-3">
                     <label class="form-label">Kategori</label>

@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import json
 import os
 from datetime import datetime
 import re
+from werkzeug.utils import secure_filename
 
 try:
     import pytesseract
@@ -50,6 +51,22 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=4)
+
+
+def save_uploaded_file(file):
+    filename = secure_filename(file.filename)
+    if not filename:
+        return ''
+    prefix = datetime.now().strftime("%Y%m%d%H%M%S_")
+    unique = prefix + filename
+    path = os.path.join(UPLOAD_FOLDER, unique)
+    file.save(path)
+    return unique
+
+
+@app.route('/uploads/<path:fname>')
+def uploaded_file(fname):
+    return send_from_directory(UPLOAD_FOLDER, fname)
 
 def recalculate_balance(transactions):
     balance = 0
@@ -125,6 +142,20 @@ def add_transaction():
         'category': category,
         'date': date
     }
+
+    # handle receipt file upload (from add form)
+    receipt_file = None
+    if 'receipt' in request.files:
+        f = request.files['receipt']
+        if f and f.filename:
+            saved = save_uploaded_file(f)
+            if saved:
+                new_transaction['receipt'] = saved
+
+    # or attach an already-uploaded scanned file via hidden field
+    receipt_filename = request.form.get('receipt_filename')
+    if receipt_filename:
+        new_transaction['receipt'] = receipt_filename
     
     data['transactions'].append(new_transaction)
     data['balance'] = recalculate_balance(data['transactions'])
@@ -187,9 +218,8 @@ def upload_scan():
     if file.filename == '':
         return redirect(url_for('scan'))
 
-    filename = file.filename
-    save_path = os.path.join(UPLOAD_FOLDER, filename)
-    file.save(save_path)
+    filename = save_uploaded_file(file)
+    save_path = os.path.join(UPLOAD_FOLDER, filename) if filename else None
 
     if not pytesseract:
         ocr_text = 'ERROR: pytesseract not installed on server.'
@@ -206,7 +236,7 @@ def upload_scan():
     # Convert total to float in rupiah format
     total_amount = parsed.get('total', 0)
 
-    return render_template('scan_result.html', merchant=parsed.get('merchant',''), date=parsed.get('date',''), total=total_amount, ocr_text=ocr_text, categories=CATEGORIES)
+    return render_template('scan_result.html', merchant=parsed.get('merchant',''), date=parsed.get('date',''), total=total_amount, ocr_text=ocr_text, categories=CATEGORIES, saved_filename=filename)
 
 @app.route('/delete_transaction/<int:transaction_id>')
 def delete_transaction(transaction_id):
